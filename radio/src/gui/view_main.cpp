@@ -154,6 +154,124 @@ void doMainScreenGraphics()
 #endif
 }
 
+#if defined(USE_ALT_TRIMS) && (LCD_W == 128) && (LCD_H == 64) 
+
+#define ALT_TRIM_RANGE    28
+#define ALT_TRIM_LENGTH   (ALT_TRIM_RANGE*2+1)
+
+/* Horizontal trim origin points */
+#define ALT_TRIM_H_Y      63
+#define ALT_TRIM_LH_X     34
+#define ALT_TRIM_RH_X     94
+
+/* Vertical trim origin points */
+#define ALT_TRIM_V_Y      31
+#define ALT_TRIM_LV_X     1
+#define ALT_TRIM_RV_X     127
+
+void displayTrims(uint8_t phase)
+{
+  for (uint8_t i=0; i<4; i++) {
+    int16_t val = getTrimValue(phase, i);
+    uint8_t att = FORCE;
+
+    //if (val < -125 || val > 125)
+    //  att |= BLINK|INVERS;
+
+    val = val / 4;
+    
+    if (val < -ALT_TRIM_RANGE)
+      val = -ALT_TRIM_RANGE;
+    else if (val > ALT_TRIM_RANGE)
+      val = ALT_TRIM_RANGE;
+    
+    switch ( CONVERT_MODE(i) ) {
+
+      case 0: /* Horizontal left */
+	{
+	  lcd_hline(ALT_TRIM_LH_X-ALT_TRIM_RANGE, ALT_TRIM_H_Y, ALT_TRIM_LENGTH);
+
+	  lcd_plot(ALT_TRIM_LH_X-ALT_TRIM_RANGE,   ALT_TRIM_H_Y-1);
+	  lcd_plot(ALT_TRIM_LH_X-ALT_TRIM_RANGE,   ALT_TRIM_H_Y-2);
+	  lcd_plot(ALT_TRIM_LH_X-ALT_TRIM_RANGE/2, ALT_TRIM_H_Y-1);
+	  lcd_plot(ALT_TRIM_LH_X,                ALT_TRIM_H_Y-1);
+	  lcd_plot(ALT_TRIM_LH_X,                ALT_TRIM_H_Y-2);
+	  lcd_plot(ALT_TRIM_LH_X+ALT_TRIM_RANGE/2, ALT_TRIM_H_Y-1);
+	  lcd_plot(ALT_TRIM_LH_X+ALT_TRIM_RANGE,   ALT_TRIM_H_Y-1);
+	  lcd_plot(ALT_TRIM_LH_X+ALT_TRIM_RANGE,   ALT_TRIM_H_Y-2);
+	  
+	  lcd_hline(ALT_TRIM_LH_X+val-2,  ALT_TRIM_H_Y-3, 5, att);
+	  lcd_hline(ALT_TRIM_LH_X+val-1,  ALT_TRIM_H_Y-2, 3, att);
+	  lcd_hline(ALT_TRIM_LH_X+val,    ALT_TRIM_H_Y-1, 1, att);
+	}
+	break;
+
+      case 1: /* Vertical left */
+	{
+	  lcd_vline(ALT_TRIM_LV_X,  ALT_TRIM_V_Y-ALT_TRIM_RANGE, ALT_TRIM_LENGTH);
+	  
+	  lcd_plot(ALT_TRIM_LV_X+1, ALT_TRIM_V_Y-ALT_TRIM_RANGE);
+	  lcd_plot(ALT_TRIM_LV_X+2, ALT_TRIM_V_Y-ALT_TRIM_RANGE);
+	  lcd_plot(ALT_TRIM_LV_X+1, ALT_TRIM_V_Y-ALT_TRIM_RANGE/2);
+	  lcd_plot(ALT_TRIM_LV_X+1, ALT_TRIM_V_Y);
+	  lcd_plot(ALT_TRIM_LV_X+2, ALT_TRIM_V_Y);
+	  lcd_plot(ALT_TRIM_LV_X+1, ALT_TRIM_V_Y+ALT_TRIM_RANGE/2);
+	  lcd_plot(ALT_TRIM_LV_X+1, ALT_TRIM_V_Y+ALT_TRIM_RANGE);
+	  lcd_plot(ALT_TRIM_LV_X+2, ALT_TRIM_V_Y+ALT_TRIM_RANGE);
+	  
+	  lcd_hline(ALT_TRIM_LV_X+3, ALT_TRIM_V_Y-val-2, 1, att);
+	  lcd_hline(ALT_TRIM_LV_X+2, ALT_TRIM_V_Y-val-1, 2, att);
+	  lcd_hline(ALT_TRIM_LV_X+1, ALT_TRIM_V_Y-val,   3, att);
+	  lcd_hline(ALT_TRIM_LV_X+2, ALT_TRIM_V_Y-val+1, 2, att);
+	  lcd_hline(ALT_TRIM_LV_X+3, ALT_TRIM_V_Y-val+2, 1, att);
+	}
+	break;
+
+      case 2: /* Vertical right */
+	{
+	  lcd_vline(ALT_TRIM_RV_X,  ALT_TRIM_V_Y-ALT_TRIM_RANGE, ALT_TRIM_LENGTH);
+	  
+	  lcd_plot(ALT_TRIM_RV_X-1, ALT_TRIM_V_Y-ALT_TRIM_RANGE);
+	  lcd_plot(ALT_TRIM_RV_X-2, ALT_TRIM_V_Y-ALT_TRIM_RANGE);
+	  lcd_plot(ALT_TRIM_RV_X-1, ALT_TRIM_V_Y-ALT_TRIM_RANGE/2);
+	  lcd_plot(ALT_TRIM_RV_X-1, ALT_TRIM_V_Y);
+	  lcd_plot(ALT_TRIM_RV_X-2, ALT_TRIM_V_Y);
+	  lcd_plot(ALT_TRIM_RV_X-1, ALT_TRIM_V_Y+ALT_TRIM_RANGE/2);
+	  lcd_plot(ALT_TRIM_RV_X-1, ALT_TRIM_V_Y+ALT_TRIM_RANGE);
+	  lcd_plot(ALT_TRIM_RV_X-2, ALT_TRIM_V_Y+ALT_TRIM_RANGE);
+	  
+	  lcd_hline(ALT_TRIM_RV_X-3, ALT_TRIM_V_Y-val-2, 1, att);
+	  lcd_hline(ALT_TRIM_RV_X-3, ALT_TRIM_V_Y-val-1, 2, att);
+	  lcd_hline(ALT_TRIM_RV_X-3, ALT_TRIM_V_Y-val,   3, att);
+	  lcd_hline(ALT_TRIM_RV_X-3, ALT_TRIM_V_Y-val+1, 2, att);
+	  lcd_hline(ALT_TRIM_RV_X-3, ALT_TRIM_V_Y-val+2, 1, att);
+	}
+	break;
+
+      case 3: /* Horizontal right */
+	{
+	  lcd_hline(ALT_TRIM_RH_X-ALT_TRIM_RANGE, ALT_TRIM_H_Y, ALT_TRIM_LENGTH);
+	  
+	  lcd_plot(ALT_TRIM_RH_X-ALT_TRIM_RANGE,   ALT_TRIM_H_Y-1);
+	  lcd_plot(ALT_TRIM_RH_X-ALT_TRIM_RANGE,   ALT_TRIM_H_Y-2);
+	  lcd_plot(ALT_TRIM_RH_X-ALT_TRIM_RANGE/2, ALT_TRIM_H_Y-1);
+	  lcd_plot(ALT_TRIM_RH_X,                ALT_TRIM_H_Y-1);
+	  lcd_plot(ALT_TRIM_RH_X,                ALT_TRIM_H_Y-2);
+	  lcd_plot(ALT_TRIM_RH_X+ALT_TRIM_RANGE/2, ALT_TRIM_H_Y-1);
+	  lcd_plot(ALT_TRIM_RH_X+ALT_TRIM_RANGE,   ALT_TRIM_H_Y-1);
+	  lcd_plot(ALT_TRIM_RH_X+ALT_TRIM_RANGE,   ALT_TRIM_H_Y-2);
+	  
+	  lcd_hline(ALT_TRIM_RH_X+val-2,  ALT_TRIM_H_Y-3, 5, att);
+	  lcd_hline(ALT_TRIM_RH_X+val-1,  ALT_TRIM_H_Y-2, 3, att);
+	  lcd_hline(ALT_TRIM_RH_X+val,    ALT_TRIM_H_Y-1, 1, att);
+	}
+	break;
+    }
+  }
+}
+
+#else
+
 void displayTrims(uint8_t phase)
 {
   for (uint8_t i=0; i<4; i++) {
@@ -194,6 +312,7 @@ void displayTrims(uint8_t phase)
     lcd_square(xm-3, ym-3, 7, att);
   }
 }
+#endif /* USE_ALT_TRIMS */
 
 #if defined(PCBTARANIS)
 void displaySliders()
