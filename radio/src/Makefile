@@ -1,5 +1,3 @@
-# !!!! BETA Makefile !!!!
-# !!!! Use at own risk !!!!
 #----------------------------------------------------------------------------
 # On command line:
 #
@@ -39,7 +37,7 @@ DOUBLE_WRITE_OK = NO
 
 # Command to read/write FLASH/EEPROM images. Currently
 # Must have avrdude interface
-AVRDUDE = /usr/local/bin/avrdude
+AVRDUDE = avrdude
 
 # Device options for AVRDUDE Command. 
 AVRDEVICE = -c usbasp -p m64
@@ -47,12 +45,14 @@ AVRDEVICE = -c usbasp -p m64
 # Delay to start second AVRDUDE command (required by some).
 DELAY = 5
 
+
 #----------- BUILD OPTIONS ---------------------------
 
 # PCB version
 # Values: 9X, 9X128, 9X2561, 9XR, 9XR128, 9XR2561, GRUVIN9X, MEGA2560, SKY9X, 9XRPRO, TARANIS 
 # Old values STD and STD128 are mapped to 9X and 9X128 for compatibility
 PCB = 9X
+#PCB = 9X2561
 
 # PCB revision
 PCBREV =
@@ -61,7 +61,7 @@ PCBREV =
 # For this option you need to modify your hardware!
 # More information at [insertURLhere]
 # Values = STD, FRSKY, FRSKY_SPORT, JETI, NMEA, ARDUPILOT, MAVLINK, TELEMETREZ
-EXT = STD
+EXT = FRSKY
 
 # FAI mode
 # Values = YES, NO, CHOICE
@@ -77,11 +77,11 @@ TURNIGY_TRANSMITTER_FIX = NO
 
 # Enable heli menu
 # Values = YES, NO
-HELI = NO
+HELI = YES
 
 # Enable templates menu
 # Values = YES, NO
-TEMPLATES = YES
+TEMPLATES = NO
 
 # Enable navigation with Pots / Sticks / Rotary encoders
 # Values = NO
@@ -95,7 +95,7 @@ NAVIGATION = NO
 
 # Switches automatic selection
 # Values = YES, NO 
-AUTOSWITCH = NO
+AUTOSWITCH = YES
 
 # Stock sticks replaced by FrSky ones
 # Values = YES, NO 
@@ -103,15 +103,15 @@ FRSKY_STICKS = NO
 
 # Sources automatic selection
 # Values = YES, NO 
-AUTOSOURCE = NO
+AUTOSOURCE = YES
 
 # Double keys support (+/- means invert, +/up means max, -/dwn means min, up/down means reset to default)
 # Values = YES, NO 
-DBLKEYS = NO
+DBLKEYS = YES
 
 # AUDIO Mods
 # Values = YES, NO 
-AUDIO = NO
+AUDIO = YES
 
 # VOICE Mods
 # Values = YES, NO 
@@ -130,11 +130,11 @@ ARITHMETIC_OVERFLOW_CHECK = NO
 # if you use standard limits for throttle or directly the throttle stick you do not need to bother about this option
 # not valid for ARM based transmitters like Taranis, They do not have this rounding issue at all
 # Values = YES, NO
-ACCURAT_THROTTLE_STATS = NO
+ACCURAT_THROTTLE_STATS = YES
 
 # HAPTIC Mods
 # Values = YES, NO 
-HAPTIC = NO
+HAPTIC = YES
 
 # SmartieParts 2.2 Backlight support (inverted)
 # Values = YES, NO 
@@ -159,7 +159,7 @@ FONT = STD
 
 # PPM center adjustable
 # Values = YES, NO
-PPM_CENTER_ADJUSTABLE = NO
+PPM_CENTER_ADJUSTABLE = YES
 
 # PPM symmetrical limits
 # Values = YES, NO
@@ -183,35 +183,35 @@ FAS_OFFSET = NO
 
 # WS HowHigh 
 # Values = YES, NO
-WS_HOW_HIGH = YES
+WS_HOW_HIGH = NO
 
 # Gauges in Telemetry screen
 # Values = YES, NO
-GAUGES = YES
+GAUGES = NO
 
-# GPS 
+# GPS
 # Values = YES, NO
-GPS = YES
+GPS = NO
 
 # Vario 
 # Values = YES, NO
-VARIO = YES
+VARIO = NO
 
 # RTCLOCK
 # Values = YES, NO
 # default = YES (means enabled when available)
-RTCLOCK = YES
+RTCLOCK = NO
 
 # BLUETOOTH
 # Values = YES, NO
 BLUETOOTH = NO
 
 # PXX (FrSky PCM) protocol
-PXX = NO
+PXX = YES
 
 # DSM2 (Spektrum) protocol
 # Values = NO, SERIAL, PPM
-DSM2 = NO
+DSM2 = PPM
 
 # HUBSAN protocol
 # Values = NO, YES
@@ -323,6 +323,7 @@ SIMU_DISKIO = NO
 # Enable audio in simulator
 # Values = NO, YES
 SIMU_AUDIO = NO
+
 
 #------- END BUILD OPTIONS ---------------------------
 
