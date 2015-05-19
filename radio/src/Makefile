@@ -324,6 +324,9 @@ SIMU_DISKIO = NO
 # Values = NO, YES
 SIMU_AUDIO = NO
 
+# Use alternative trims
+ALTRIMS = YES
+
 
 #------- END BUILD OPTIONS ---------------------------
 
@@ -1163,6 +1166,10 @@ endif
 ifeq ($(3POS), POT3)
   CPPDEFS += -DEXTRA_3POS=3
   # EEPROM_VARIANT += ${3POS_VARIANT}
+endif
+
+ifeq ($(ALTRIMS), YES)
+  CPPDEFS += -DUSE_ALT_TRIMS
 endif
 
 #---------------- Compiler Options C++ ----------------
