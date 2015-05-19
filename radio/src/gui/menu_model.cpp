@@ -515,7 +515,14 @@ void menuModelSelect(uint8_t event)
           menuHandler = onModelSelectMenu;
 #else
           if (g_eeGeneral.currModel != sub) {
-            selectModel(sub);
+            if (eeModelExists(sub)) {
+              selectModel(sub);
+              popMenu();
+              return;
+            } 
+            else {
+              selectModel(sub);
+            }
           }
 #endif
         }
