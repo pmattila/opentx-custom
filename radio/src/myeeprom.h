@@ -137,9 +137,9 @@
   #define NUM_POTS            3
   #define NUM_XPOTS           0
 #else
-  #define MAX_MODELS          16
+  #define MAX_MODELS          7
   #define NUM_CHNOUT          16 // number of real output channels CH1-CH16
-  #define MAX_FLIGHT_MODES    5
+  #define MAX_FLIGHT_MODES    3
   #define MAX_MIXERS          32
   #define MAX_EXPOS           14
   #define NUM_LOGICAL_SWITCH  12 // number of custom switches

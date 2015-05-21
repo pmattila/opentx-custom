@@ -117,7 +117,7 @@ const int OpenTxEepromInterface::getMaxModels()
   else if (board == BOARD_GRUVIN9X)
     return 30;
   else
-    return 16;
+    return 7;
 }
 
 template <class T>
@@ -554,7 +554,7 @@ int OpenTxFirmware::getCapability(const Capability capability)
       else if (board==BOARD_GRUVIN9X || board==BOARD_M2561)
         return 6;
       else
-        return 5;
+        return 3;
     case FlightModesHaveFades:
       return 1;
     case Heli:
