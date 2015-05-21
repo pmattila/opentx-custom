@@ -130,6 +130,7 @@ set(common_SRCS
   firmwares/opentx/opentxTaranisSimulator.cpp
   firmwares/opentx/opentxSky9xsimulator.cpp
   firmwares/opentx/opentxGruvin9xsimulator.cpp
+  firmwares/opentx/opentxM2561simulator.cpp
   firmwares/opentx/opentxM128simulator.cpp
   firmwares/opentx/opentxM64simulator.cpp
   file.cpp

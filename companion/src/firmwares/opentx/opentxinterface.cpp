@@ -16,15 +16,20 @@
 
 #include <iostream>
 #include <QMessageBox>
+
 #include "opentxinterface.h"
-#include "opentxeeprom.h"
+
 #include "open9xGruvin9xeeprom.h"
 #include "open9xSky9xeeprom.h"
+#include "opentxeeprom.h"
+
 #include "opentxM64simulator.h"
 #include "opentxM128simulator.h"
+#include "opentxM2561simulator.h"
 #include "opentxGruvin9xsimulator.h"
 #include "opentxSky9xsimulator.h"
 #include "opentxTaranisSimulator.h"
+
 #include "file.h"
 #include "appdata.h"
 
@@ -61,6 +66,8 @@ const char * OpenTxEepromInterface::getName()
       return "OpenTX for 9X board";
     case BOARD_M128:
       return "OpenTX for M128 / 9X board";
+    case BOARD_M2561:
+      return "OpenTX for M2561 / 9X board";
     case BOARD_GRUVIN9X:
       return "OpenTX for Gruvin9x board / 9X";
     case BOARD_TARANIS:
@@ -83,6 +90,8 @@ const int OpenTxEepromInterface::getEEpromSize()
       return EESIZE_STOCK;
     case BOARD_M128:
       return EESIZE_M128;
+    case BOARD_M2561:
+      return EESIZE_M2561;
     case BOARD_GRUVIN9X:
       return EESIZE_GRUVIN9X;
     case BOARD_SKY9X:
@@ -102,6 +111,8 @@ const int OpenTxEepromInterface::getMaxModels()
   if (IS_ARM(board))
     return 60;
   else if (board == BOARD_M128)
+    return 30;
+  else if (board == BOARD_M2561)
     return 30;
   else if (board == BOARD_GRUVIN9X)
     return 30;
@@ -395,8 +406,7 @@ int OpenTxEepromInterface::save(uint8_t *eeprom, RadioData &radioData, uint32_t 
         break;
       case BOARD_GRUVIN9X:
       case BOARD_MEGA2560:
-        version = 217;
-        break;
+      case BOARD_M2561:
       case BOARD_M128:
         version = 217;
         break;
@@ -410,9 +420,11 @@ int OpenTxEepromInterface::save(uint8_t *eeprom, RadioData &radioData, uint32_t 
 
   efile->EeFsCreate(eeprom, size, board);
 
-  if (board == BOARD_M128) {
+  if (board == BOARD_M128)
     variant |= M128_VARIANT;
-  }
+
+  if (board == BOARD_M2561)
+    variant |= M2561_VARIANT;
 
   int result = saveGeneral<OpenTxGeneralData>(radioData.generalSettings, board, version, variant);
   if (!result) {
@@ -539,7 +551,7 @@ int OpenTxFirmware::getCapability(const Capability capability)
     case FlightModes:
       if (IS_ARM(board))
         return 9;
-      else if (board==BOARD_GRUVIN9X)
+      else if (board==BOARD_GRUVIN9X || board==BOARD_M2561)
         return 6;
       else
         return 5;
@@ -589,7 +601,7 @@ int OpenTxFirmware::getCapability(const Capability capability)
     case CustomFunctions:
       if (IS_ARM(board))
         return 64;
-      else if (board==BOARD_GRUVIN9X||board==BOARD_M128)
+      else if (board==BOARD_GRUVIN9X||board==BOARD_M128||board==BOARD_M2561)
         return 24;
       else
         return 16;
@@ -742,6 +754,8 @@ int OpenTxFirmware::getCapability(const Capability capability)
         return SIMU_STOCK_VARIANTS;
       else if (board == BOARD_M128)
         return SIMU_M128_VARIANTS;
+      else if (board == BOARD_M2561)
+        return SIMU_M2561_VARIANTS;
       else
         return 0;
     case MavlinkTelemetry:
@@ -948,9 +962,8 @@ bool OpenTxEepromInterface::checkVariant(unsigned int version, unsigned int vari
     std::cout << " error when loading M128 general settings (wrong variant)";
     return false;
   }
-  else {
-    return true;
-  }
+
+  return true;
 }
 
 unsigned long OpenTxEepromInterface::loadBackup(RadioData &radioData, uint8_t *eeprom, int esize, int index)
@@ -1032,6 +1045,7 @@ QString OpenTxFirmware::getFirmwareUrl()
   switch (board) {
     case BOARD_STOCK:
     case BOARD_M128:
+    case BOARD_M2561:
     case BOARD_GRUVIN9X:
       url.append(QString("/getfw.php?fw=%1.hex").arg(id));
       break;
@@ -1069,6 +1083,8 @@ SimulatorInterface * OpenTxFirmware::getSimulator()
       return new OpenTxM64Simulator();
     case BOARD_M128:
       return new OpenTxM128Simulator();
+    case BOARD_M2561:
+      return new OpenTxM2561Simulator();
     case BOARD_GRUVIN9X:
       return new Open9xGruvin9xSimulator();
     case BOARD_SKY9X:
@@ -1110,7 +1126,7 @@ void registerOpenTxFirmwares()
   openTx->addOption("audio", QObject::tr("Support for radio modified with regular speaker"));
   openTx->addOption("voice", QObject::tr("Used if you have modified your radio with voice mode"));
   openTx->addOption("haptic", QObject::tr("Used if you have modified your radio with haptic mode"));
-  // NOT TESTED openTx->addOption("PXX", QObject::tr("Support of FrSky PXX protocol"));
+  openTx->addOption("PXX", QObject::tr("Support of FrSky PXX protocol"));
   openTx->addOption("DSM2", QObject::tr("Support for DSM2 modules"));
   openTx->addOption("ppmca", QObject::tr("PPM center adjustment in limits"));
   openTx->addOption("gvars", QObject::tr("Global variables"), GVARS_VARIANT);
@@ -1147,6 +1163,36 @@ void registerOpenTxFirmwares()
   openTx->addOption("voice", QObject::tr("Used if you have modified your radio with voice mode"));
   openTx->addOption("haptic", QObject::tr("Used if you have modified your radio with haptic mode"));
   // NOT TESTED openTx->addOption("PXX", QObject::tr("Support of FrSky PXX protocol"));
+  openTx->addOption("DSM2", QObject::tr("Support for DSM2 modules"));
+  openTx->addOption("ppmca", QObject::tr("PPM center adjustment in limits"));
+  openTx->addOption("gvars", QObject::tr("Global variables"), GVARS_VARIANT);
+  openTx->addOption("symlimits", QObject::tr("Symetrical Limits"));
+  openTx->addOptions(nav_options);
+  openTx->addOption("sp22", QObject::tr("SmartieParts 2.2 Backlight support"));
+  openTx->addOption("autosource", QObject::tr("In model setup menus automatically set source by moving the control"));
+  openTx->addOption("autoswitch", QObject::tr("In model setup menus automatically set switch by moving the control"));
+  openTx->addOption("dblkeys", QObject::tr("Enable resetting values by pressing up and down at the same time"));
+  openTx->addOption("nographics", QObject::tr("No graphical check boxes and sliders"));
+  openTx->addOption("battgraph", QObject::tr("Battery graph"));
+  openTx->addOption("nobold", QObject::tr("Don't use bold font for highlighting active items"));
+  openTx->addOption("thrtrace", QObject::tr("Enable the throttle trace in Statistics"));
+  openTx->addOption("pgbar", QObject::tr("EEprom write Progress bar"));
+  openTx->addOption("imperial", QObject::tr("Imperial units"));
+  addOpenTxCommonOptions(openTx);
+  firmwares.push_back(openTx);
+
+  /* 9x board with M2561 chip */
+  openTx = new OpenTxFirmware("opentx-9x2561", QObject::tr("OpenTX for M2561 / 9X board"), BOARD_M2561);
+  openTx->addOptions(ext_options);
+  openTx->addOption("heli", QObject::tr("Enable heli menu and cyclic mix support"));
+  openTx->addOption("templates", QObject::tr("Enable TEMPLATES menu"));
+  openTx->addOption("nosplash", QObject::tr("No splash screen"));
+  openTx->addOption("nofp", QObject::tr("No flight modes"));
+  openTx->addOption("nocurves", QObject::tr("Disable curves menus"));
+  openTx->addOption("audio", QObject::tr("Support for radio modified with regular speaker"));
+  openTx->addOption("voice", QObject::tr("Used if you have modified your radio with voice mode"));
+  openTx->addOption("haptic", QObject::tr("Used if you have modified your radio with haptic mode"));
+  openTx->addOption("PXX", QObject::tr("Support of FrSky PXX protocol"));
   openTx->addOption("DSM2", QObject::tr("Support for DSM2 modules"));
   openTx->addOption("ppmca", QObject::tr("PPM center adjustment in limits"));
   openTx->addOption("gvars", QObject::tr("Global variables"), GVARS_VARIANT);
