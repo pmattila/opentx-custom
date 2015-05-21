@@ -27,17 +27,31 @@
 #define POS3_VARIANT           0x0004
 #define MAVLINK_VARIANT        0x0008
 #define M128_VARIANT           0x8000
+#define M2561_VARIANT          0x4000
 
 #define SIMU_STOCK_VARIANTS    (GVARS_VARIANT|FRSKY_VARIANT)
 #define SIMU_M128_VARIANTS     (M128_VARIANT|SIMU_STOCK_VARIANTS)
+#define SIMU_M2561_VARIANTS    (M2561_VARIANT|SIMU_STOCK_VARIANTS)
+
+#ifdef O9X_MAX_FLIGHT_MODES
+# undef O9X_MAX_FLIGHT_MODES
+#endif
+
+#ifdef O9X_MAX_EXPOS
+# undef O9X_MAX_EXPOS
+#endif
+
+#ifdef O9X_NUM_FSW
+# undef O9X_NUM_FSW
+#endif
 
 #define O9X_MAX_TIMERS         2
-#define O9X_MAX_FLIGHT_MODES         5
+#define O9X_MAX_FLIGHT_MODES   6
 #define O9X_MAX_MIXERS         32
-#define O9X_MAX_EXPOS          14
+#define O9X_MAX_EXPOS          16
 #define O9X_NUM_CHNOUT         16 // number of real output channels CH1-CH16
 #define O9X_NUM_CSW            12 // number of custom switches
-#define O9X_NUM_FSW            16 // number of functions assigned to switches
+#define O9X_NUM_FSW            24 // number of functions assigned to switches
 #define O9X_MAX_CURVES         8
 #define O9X_NUM_POINTS         (112-O9X_MAX_CURVES)
 
