@@ -1332,6 +1332,7 @@ void RegisterEepromInterfaces()
 {
   eepromInterfaces.push_back(new OpenTxEepromInterface(BOARD_STOCK));
   eepromInterfaces.push_back(new OpenTxEepromInterface(BOARD_M128));
+  eepromInterfaces.push_back(new OpenTxEepromInterface(BOARD_M2561));
   eepromInterfaces.push_back(new OpenTxEepromInterface(BOARD_GRUVIN9X));
   eepromInterfaces.push_back(new OpenTxEepromInterface(BOARD_SKY9X));
   eepromInterfaces.push_back(new OpenTxEepromInterface(BOARD_9XRPRO));
@@ -1402,6 +1403,8 @@ QString getBoardName(BoardEnum board)
       return "9X";
     case BOARD_M128:
       return "9X128";
+    case BOARD_M2561:
+      return "9X2561";
     case BOARD_GRUVIN9X:
       return "Gruvin9x";
     case BOARD_MEGA2560:

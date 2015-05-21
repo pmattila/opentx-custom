@@ -33,6 +33,7 @@
 
 #define EESIZE_STOCK          2048
 #define EESIZE_M128           4096
+#define EESIZE_M2561          4096
 #define EESIZE_GRUVIN9X       4096
 #define EESIZE_TARANIS        (32*1024)
 #define EESIZE_SKY9X          (128*4096)
@@ -44,6 +45,7 @@ template<class t> t LIMIT(t mi, t x, t ma) { return std::min(std::max(mi, x), ma
 enum BoardEnum {
   BOARD_STOCK,
   BOARD_M128,
+  BOARD_M2561,
   BOARD_MEGA2560,
   BOARD_GRUVIN9X,
   BOARD_SKY9X,
@@ -54,9 +56,10 @@ enum BoardEnum {
 
 QString getBoardName(BoardEnum board);
 
-#define IS_9X(board)           (board==BOARD_STOCK || board==BOARD_M128)
+#define IS_9X(board)           (board==BOARD_STOCK || board==BOARD_M128 || board==BOARD_M2561)
 #define IS_STOCK(board)        (board==BOARD_STOCK)
 #define IS_2560(board)         (board==BOARD_GRUVIN9X || board==BOARD_MEGA2560)
+#define IS_2561(board)         (board==BOARD_M2561)
 #define IS_SKY9X(board)        (board==BOARD_SKY9X || board==BOARD_9XRPRO)
 #define IS_9XRPRO(board)       (board==BOARD_9XRPRO)
 #define IS_TARANIS(board)      (board==BOARD_TARANIS  || board==BOARD_TARANIS_PLUS)

@@ -804,6 +804,8 @@ QStringList MainWindow::GetAvrdudeArguments(const QString &cmd, const QString &f
     arguments << "-c" << programmer << "-p";
     if (GetEepromInterface()->getBoard() == BOARD_GRUVIN9X)
       arguments << "m2560";
+    else if (GetEepromInterface()->getBoard() == BOARD_M2561)
+      arguments << "m2561";
     else if (GetEepromInterface()->getBoard() == BOARD_M128)
       arguments << "m128";
     else

@@ -154,7 +154,7 @@ void doMainScreenGraphics()
 #endif
 }
 
-#if defined(USE_ALT_TRIMS) && (LCD_W == 128) && (LCD_H == 64) 
+#if !defined(USE_OLD_TRIMS) && (LCD_W == 128) && (LCD_H == 64) 
 
 #define ALT_TRIM_RANGE    28
 #define ALT_TRIM_LENGTH   (ALT_TRIM_RANGE*2+1)
