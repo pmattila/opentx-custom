@@ -946,7 +946,7 @@ void putsTelemetryChannel(xcoord_t x, uint8_t y, uint8_t channel, lcdint_t val, 
 #if defined(FRSKY)
     case TELEM_MIN_A1-1:
     case TELEM_MIN_A2-1:
-#if defined(CPUARM)
+#if defined(FRSKY_SPORT_A3_A4)
     case TELEM_MIN_A3-1:
     case TELEM_MIN_A4-1:
 #endif
@@ -954,7 +954,7 @@ void putsTelemetryChannel(xcoord_t x, uint8_t y, uint8_t channel, lcdint_t val, 
       // no break
     case TELEM_A1-1:
     case TELEM_A2-1:
-#if defined(CPUARM)
+#if defined(FRSKY_SPORT_A3_A4)
     case TELEM_A3-1:
     case TELEM_A4-1:
 #endif
@@ -1025,7 +1025,7 @@ void putsTelemetryChannel(xcoord_t x, uint8_t y, uint8_t channel, lcdint_t val, 
       putsTelemetryValue(x, y, val, UNIT_KTS, att|PREC1);
       break;
 
-#if defined(CPUARM)
+#if defined(FRSKY_SPORT_SWR)
     case TELEM_SWR-1:
 #endif
     case TELEM_RSSI_TX-1:

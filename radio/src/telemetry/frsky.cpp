@@ -67,7 +67,7 @@ uint8_t frskyRxBufferCount = 0;
 
 FrskyData frskyData;
 
-#if defined(CPUARM)
+#if defined(FRSKY_SPORT)
 uint8_t telemetryProtocol = 255;
 #define IS_FRSKY_D_PROTOCOL()      (telemetryProtocol == PROTOCOL_FRSKY_D)
 #define IS_FRSKY_SPORT_PROTOCOL()  (telemetryProtocol == PROTOCOL_FRSKY_SPORT)
@@ -280,8 +280,16 @@ enum AlarmsCheckSteps {
 
 void telemetryWakeup()
 {
+#if defined(FRSKY_SPORT)
+  uint8_t requiredTelemetryProtocol;
 #if defined(CPUARM)
-  uint8_t requiredTelemetryProtocol = MODEL_TELEMETRY_PROTOCOL();
+  requiredTelemetryProtocol = MODEL_TELEMETRY_PROTOCOL();
+#else
+  if (g_model.protocol == PROTO_PXX)
+    requiredTelemetryProtocol = PROTOCOL_FRSKY_SPORT;
+  else
+    requiredTelemetryProtocol = PROTOCOL_FRSKY_D;
+#endif
   if (telemetryProtocol != requiredTelemetryProtocol) {
     telemetryProtocol = requiredTelemetryProtocol;
     telemetryInit();
@@ -438,7 +446,7 @@ void telemetryWakeup()
 
 void telemetryInterrupt10ms()
 {
-#if defined(CPUARM)
+#if defined(FRSKY_SPORT)
   uint16_t voltage = frskyData.hub.cellsSum; /* unit: 1/10 volts */
 #elif defined(FRSKY_HUB)
   uint16_t voltage = 0; /* unit: 1/10 volts */
@@ -455,7 +463,7 @@ void telemetryInterrupt10ms()
     if (!TELEMETRY_OPENXSENSOR()) {
       // power calculation
       uint8_t channel = g_model.frsky.voltsSource;
-#if defined(CPUARM)
+#if defined(FRSKY_SPORT_A3_A4)
       if (channel <= FRSKY_VOLTS_SOURCE_A4) {
         voltage = applyChannelRatio(channel, frskyData.analog[channel].value) / 10;
       }
@@ -536,14 +544,14 @@ void telemetryReset()
 
 #if defined(SIMU)
 
-#if defined(CPUARM)
+#if defined(FRSKY_SPORT_SWR)
   frskyData.swr.value = 30;
 #endif
   frskyData.rssi[0].value = 75;
   frskyData.rssi[1].value = 75;
   frskyData.analog[TELEM_ANA_A1].set(120, UNIT_VOLTS);
   frskyData.analog[TELEM_ANA_A2].set(240, UNIT_VOLTS);
-#if defined(CPUARM)
+#if defined(FRSKY_SPORT_A3_A4)
   frskyData.analog[TELEM_ANA_A3].set(100, UNIT_VOLTS);
   frskyData.analog[TELEM_ANA_A4].set(200, UNIT_VOLTS);
 #endif
@@ -587,7 +595,7 @@ void telemetryReset()
   frskyData.hub.baroAltitude_bp = 50;
   frskyData.hub.minAltitude = 10;
   frskyData.hub.maxAltitude = 500;
-#if defined(CPUARM)
+#if defined(FRSKY_SPORT)
   frskyData.hub.baroAltitude = 340*100;  //in cm
 #endif
 
@@ -602,16 +610,18 @@ void telemetryReset()
 
 void telemetryInit(void)
 {
-#if defined(CPUARM)
-  if (telemetryProtocol == PROTOCOL_FRSKY_D) {
-    telemetryPortInit(FRSKY_D_BAUDRATE);
+#if defined(FRSKY_SPORT)
+  if (telemetryProtocol == PROTOCOL_FRSKY_SPORT) {
+    telemetryPortInit(FRSKY_SPORT_BAUDRATE);
   }
+#if defined(PCBSKY9X)
   else if (telemetryProtocol==PROTOCOL_FRSKY_D_SECONDARY) {
     telemetryPortInit(0);
     telemetrySecondPortInit(PROTOCOL_FRSKY_D_SECONDARY);
   }
+#endif
   else {
-    telemetryPortInit(FRSKY_SPORT_BAUDRATE);
+    telemetryPortInit(FRSKY_D_BAUDRATE);
   }
 #elif !defined(SIMU)
   telemetryPortInit();
@@ -620,7 +630,8 @@ void telemetryInit(void)
   // we don't reset the telemetry here as we would also reset the consumption after model load
 }
 
-#if defined(CPUARM)
+#if defined(FRSKY_SPORT)
+
 void frskySetCellsCount(uint8_t cellscount)
 {
   if (cellscount <= DIM(frskyData.hub.cellVolts)) {
@@ -685,7 +696,9 @@ void frskyUpdateCells(void)
   frskyCellVoltage_t cellVolts = (frskyCellVoltage_t) (((((frskyData.hub.volts & 0xFF00) >> 8) + ((frskyData.hub.volts & 0x000F) << 8))) / (5*TELEMETRY_CELL_VOLTAGE_MUTLIPLIER));
   frskySetCellVoltage(battnumber, cellVolts);
 }
+
 #elif defined(FRSKY_HUB)
+
 void frskyUpdateCells(void)
 {
   // Voltage => Cell number + Cell voltage
@@ -704,4 +717,5 @@ void frskyUpdateCells(void)
     }
   }
 }
+
 #endif
