@@ -42,6 +42,13 @@
 #include <stddef.h>
 #include <stdlib.h>
 
+// S.PORT hack
+#if defined(CPUARM) && defined(FRSKY)
+  #define FRSKY_SPORT
+  #define FRSKY_SPORT_SWR
+  #define FRSKY_SPORT_A3_A4
+#endif
+
 #if defined(PCBSKY9X)
   #define IS_PCBSKY9X        true
   #define CASE_PCBSKY9X(x)   x,

@@ -5542,7 +5542,7 @@ enum menuModelTelemetryItems {
   ITEM_TELEMETRY_A2_OFFSET,
   ITEM_TELEMETRY_A2_ALARM1,
   ITEM_TELEMETRY_A2_ALARM2,
-#if defined(CPUARM)
+#if defined(FRSKY_SPORT_A3_A4)
   ITEM_TELEMETRY_A3_LABEL,
   ITEM_TELEMETRY_A3_RANGE,
   ITEM_TELEMETRY_A3_OFFSET,
@@ -5693,7 +5693,7 @@ void menuModelTelemetry(uint8_t event)
 
     uint8_t blink = ((s_editMode>0) ? BLINK|INVERS : INVERS);
     uint8_t attr = (sub == k ? blink : 0);
-#if defined(CPUARM)
+#if defined(FRSKY_SPORT_A3_A4)
     uint8_t ch = TELEM_ANA_A1;
     if (k >= ITEM_TELEMETRY_A4_LABEL)
       ch = TELEM_ANA_A4;
@@ -5717,7 +5717,7 @@ void menuModelTelemetry(uint8_t event)
 
       case ITEM_TELEMETRY_A1_LABEL:
       case ITEM_TELEMETRY_A2_LABEL:
-#if defined(CPUARM)
+#if defined(FRSKY_SPORT_A3_A4)
       case ITEM_TELEMETRY_A3_LABEL:
       case ITEM_TELEMETRY_A4_LABEL:
 #endif
@@ -5728,7 +5728,7 @@ void menuModelTelemetry(uint8_t event)
 
       case ITEM_TELEMETRY_A1_RANGE:
       case ITEM_TELEMETRY_A2_RANGE:
-#if defined(CPUARM)
+#if defined(FRSKY_SPORT_A3_A4)
       case ITEM_TELEMETRY_A3_RANGE:
       case ITEM_TELEMETRY_A4_RANGE:
 #endif
@@ -5758,7 +5758,7 @@ void menuModelTelemetry(uint8_t event)
 
       case ITEM_TELEMETRY_A1_OFFSET:
       case ITEM_TELEMETRY_A2_OFFSET:
-#if defined(CPUARM)
+#if defined(FRSKY_SPORT_A3_A4)
       case ITEM_TELEMETRY_A3_OFFSET:
       case ITEM_TELEMETRY_A4_OFFSET:
 #endif
@@ -5771,14 +5771,14 @@ void menuModelTelemetry(uint8_t event)
       case ITEM_TELEMETRY_A1_ALARM2:
       case ITEM_TELEMETRY_A2_ALARM1:
       case ITEM_TELEMETRY_A2_ALARM2:
-#if defined(CPUARM)
+#if defined(FRSKY_SPORT_A3_A4)
       case ITEM_TELEMETRY_A3_ALARM1:
       case ITEM_TELEMETRY_A3_ALARM2:
       case ITEM_TELEMETRY_A4_ALARM1:
       case ITEM_TELEMETRY_A4_ALARM2:
 #endif
       {
-#if defined(CPUARM)
+#if defined(FRSKY_SPORT_A3_A4)
         uint8_t alarm = ((k==ITEM_TELEMETRY_A1_ALARM1 || k==ITEM_TELEMETRY_A2_ALARM1 || k==ITEM_TELEMETRY_A3_ALARM1 || k==ITEM_TELEMETRY_A4_ALARM1) ? 0 : 1);
 #else
         uint8_t alarm = ((k==ITEM_TELEMETRY_A1_ALARM1 || k==ITEM_TELEMETRY_A2_ALARM1) ? 0 : 1);
