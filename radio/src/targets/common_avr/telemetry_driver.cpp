@@ -105,24 +105,45 @@ ISR(USART0_RX_vect)
   UCSR0B |= (1 << RXCIE0); // enable Interrupt
 }
 
-void telemetryPortInit()
-{
 #if !defined(SIMU)
-  DDRE &= ~(1 << DDE0);    // set RXD0 pin as input
-  PORTE &= ~(1 << PORTE0); // disable pullup on RXD0 pin
 
+void telemetryPortInit9600()
+{
   #undef BAUD
   #define BAUD 9600
   #include <util/setbaud.h>
 
   UBRR0H = UBRRH_VALUE;
   UBRR0L = UBRRL_VALUE;
-  UCSR0A &= ~(1 << U2X0); // disable double speed operation.
 
+  UCSR0A &= ~(1 << U2X0); // disable double speed operation.
+}
+
+void telemetryPortInit57600()
+{
+  #undef BAUD
+  #define BAUD 57600
+  #include <util/setbaud.h>
+
+  UBRR0H = UBRRH_VALUE;
+  UBRR0L = UBRRL_VALUE;
+
+  UCSR0A &= ~(1 << U2X0); // disable double speed operation.
+}
+
+void telemetryPortInit(uint32_t baudrate)
+{
+  DDRE &= ~(1 << DDE0);    // set RXD0 pin as input
+  PORTE &= ~(1 << PORTE0); // disable pullup on RXD0 pin
+
+  if (baudrate == 57600)
+    telemetryPortInit57600();
+  else
+    telemetryPortInit9600();
+    
   // set 8N1
   UCSR0B = 0 | (0 << RXCIE0) | (0 << TXCIE0) | (0 << UDRIE0) | (0 << RXEN0) | (0 << TXEN0) | (0 << UCSZ02);
   UCSR0C = 0 | (1 << UCSZ01) | (1 << UCSZ00);
-
 
   while (UCSR0A & (1 << RXC0)) UDR0; // flush receive buffer
 
@@ -131,12 +152,23 @@ void telemetryPortInit()
   frskyTxBufferCount = 0; // TODO not driver code
 
   telemetryEnableRx(); // enable FrSky-Telemetry reception
-#endif
 }
 
 void telemetryTransmitBuffer()
 {
   UCSR0B |= (1 << UDRIE0); // enable  UDRE0 interrupt
 }
+
+#else
+
+void telemetryPortInit(uint32_t baudrate)
+{
+}
+
+void telemetryTransmitBuffer()
+{
+}
+
+#endif
 
 #endif

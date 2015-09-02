@@ -59,7 +59,7 @@ extern uint8_t frskyUsrStreaming;
 
 extern uint8_t link_counter;
 
-#if defined(CPUARM)
+#if defined(FRSKY_SPORT)
 enum TelemetryStates {
   TELEMETRY_INIT,
   TELEMETRY_OK,
@@ -96,7 +96,7 @@ class FrskyValueWithMinMax: public FrskyValueWithMin {
     void set(uint8_t value, uint8_t unit);
 };
 
-#if defined(CPUARM)
+#if defined(FRSKY_SPORT)
 PACK(struct FrskySerialData {
     int16_t  spare1;
     int16_t  gpsAltitude_bp;   // 0x01   before punct
@@ -299,7 +299,7 @@ PACK(struct FrskySerialData {
 enum TelemAnas {
   TELEM_ANA_A1,
   TELEM_ANA_A2,
-#if defined(CPUARM)
+#if defined(FRSKY_SPORT_A3_A4)
   TELEM_ANA_A3,
   TELEM_ANA_A4,
 #endif
@@ -309,8 +309,10 @@ enum TelemAnas {
 struct FrskyData {
   FrskyValueWithMinMax analog[TELEM_ANA_COUNT];
   FrskyValueWithMin    rssi[2];
-#if defined(CPUARM)
+#if defined(FRSKY_SPORT)
+#if defined(FRSKY_SPORT_SWR)
   FrskyValueWithMin    swr;
+#endif
   uint16_t xjtVersion;
 #endif
   FrskySerialData hub;  
@@ -328,7 +330,7 @@ enum AlarmLevel {
 #define ALARM_GREATER(channel, alarm)     ((g_model.frsky.channels[channel].alarms_greater >> alarm) & 1)
 #define ALARM_LEVEL(channel, alarm)       ((g_model.frsky.channels[channel].alarms_level >> (2*alarm)) & 3)
 
-#if defined(CPUARM)
+#if defined(FRSKY_SPORT)
   #define TELEMETRY_STREAMING()           (frskyData.rssi[0].value > 0)
 
   #define TELEMETRY_CELL_VOLTAGE_MUTLIPLIER  1
@@ -455,13 +457,13 @@ void telemetryReset();
 void telemetryInit(void);
 void telemetryInterrupt10ms(void);
 
-#if defined(CPUARM)
+#if defined(FRSKY_SPORT)
   typedef uint16_t frskyCellVoltage_t;
 #elif defined(FRSKY_HUB)
   typedef uint8_t frskyCellVoltage_t;
 #endif
 
-#if defined(CPUARM) || defined(FRSKY_HUB)
+#if defined(FRSKY_SPORT) || defined(FRSKY_HUB)
 void frskySetCellsCount(uint8_t cellscount);
 void frskySetCellVoltage(uint8_t battnumber, frskyCellVoltage_t cellVolts);
 void frskyUpdateCells(void);
@@ -469,7 +471,7 @@ void frskyUpdateCells(void);
 
 #if defined(PCBTARANIS)
   #define MODEL_TELEMETRY_PROTOCOL() ((g_model.moduleData[INTERNAL_MODULE].rfProtocol == RF_PROTO_OFF && g_model.externalModule == MODULE_TYPE_PPM) ? g_model.telemetryProtocol : PROTOCOL_FRSKY_SPORT)
-#elif defined(CPUARM)
+#elif defined (FRSKY_SPORT)
   #define MODEL_TELEMETRY_PROTOCOL() g_model.telemetryProtocol
 #endif
 

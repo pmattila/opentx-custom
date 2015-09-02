@@ -57,6 +57,7 @@ void processHubPacket(uint8_t id, uint16_t value)
   if (id > FRSKY_LAST_ID)
     return;
 
+#if defined(GPS)
   if (id == GPS_LAT_BP_ID) {
     if (value)
       frskyData.hub.gpsFix = 1;
@@ -75,6 +76,7 @@ void processHubPacket(uint8_t id, uint16_t value)
     if (frskyData.hub.gpsFix <= 0)
       return;
   }
+#endif // GPS
 
   ((uint16_t*)&frskyData.hub)[id] = value;
 
@@ -123,6 +125,7 @@ void processHubPacket(uint8_t id, uint16_t value)
       setBaroAltitude((int32_t)100 * frskyData.hub.baroAltitude_bp + (frskyData.hub.baroAltitude_bp >= 0 ? frskyData.hub.baroAltitude_ap : -frskyData.hub.baroAltitude_ap));
       break;
 
+#if defined(GPS)
     case GPS_ALT_AP_ID:
     {
       frskyData.hub.gpsAltitude = (frskyData.hub.gpsAltitude_bp * 100) + frskyData.hub.gpsAltitude_ap;
@@ -151,12 +154,13 @@ void processHubPacket(uint8_t id, uint16_t value)
         frskyData.hub.maxGpsSpeed = frskyData.hub.gpsSpeed_bp;
       break;
 
-    case VOLTS_ID:
-      frskyUpdateCells();
-      break;
-
     case GPS_HOUR_MIN_ID:
       frskyData.hub.hour = ((uint8_t)(frskyData.hub.hour + g_eeGeneral.timezone + 24)) % 24;
+      break;
+#endif // GPS
+
+    case VOLTS_ID:
+      frskyUpdateCells();
       break;
 
     case ACCEL_X_ID:
@@ -226,9 +230,11 @@ void frskySportProcessPacket(uint8_t *packet)
       if (appId == XJT_VERSION_ID) {
         frskyData.xjtVersion = HUB_DATA_U16(packet);
       }
+#if defined(FRSKY_SPORT_SWR)
       else if (appId == SWR_ID) {
         frskyData.swr.set(SPORT_DATA_U8(packet));
       }
+#endif
 #endif
       else if (frskyData.rssi[0].value > 0) {
         if (appId == ADC1_ID || appId == ADC2_ID) {
@@ -303,6 +309,7 @@ void frskySportProcessPacket(uint8_t *packet)
           if (frskyData.hub.airSpeed > frskyData.hub.maxAirSpeed)
             frskyData.hub.maxAirSpeed = frskyData.hub.airSpeed;
         }
+#if defined(GPS)
         else if (appId >= GPS_SPEED_FIRST_ID && appId <= GPS_SPEED_LAST_ID) {
           div_t qr = div(SPORT_DATA_U32(packet), 1000);
           frskyData.hub.gpsSpeed_bp = qr.quot;
@@ -387,12 +394,15 @@ void frskySportProcessPacket(uint8_t *packet)
             frskyData.hub.gpsFix = 0;
           }
         }
+#endif /* GPS */
+#if defined(FRSKY_SPORT_A3_A4)
         else if (appId >= A3_FIRST_ID && appId <= A3_LAST_ID) {
           frskyData.analog[TELEM_ANA_A3].set((SPORT_DATA_U32(packet)*255+165)/330, UNIT_VOLTS);
         }
         else if (appId >= A4_FIRST_ID && appId <= A4_LAST_ID) {
           frskyData.analog[TELEM_ANA_A4].set((SPORT_DATA_U32(packet)*255+165)/330, UNIT_VOLTS);
         }
+#endif
         else if (appId >= CELLS_FIRST_ID && appId <= CELLS_LAST_ID) {
           uint32_t data = SPORT_DATA_U32(packet);
           uint8_t battnumber = data & 0xF;
