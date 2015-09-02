@@ -1046,7 +1046,7 @@ enum TelemetrySource {
 #endif
   TELEM_TIMER1,                   LUA_EXPORT_TELEMETRY("timer1", "Timer 1 value [seconds]")
   TELEM_TIMER2,                   LUA_EXPORT_TELEMETRY("timer2", "Timer 2 value [seconds]")
-#if defined(CPUARM)       
+#if defined(FRSKY_SPORT_SWR)
   TELEM_SWR,                      LUA_EXPORT_TELEMETRY("swr", "Transmitter antenna quality [less is better]")
 #endif        
   TELEM_RSSI_TX,        
@@ -1057,7 +1057,7 @@ enum TelemetrySource {
   TELEM_A_FIRST,        
   TELEM_A1=TELEM_A_FIRST,         LUA_EXPORT_TELEMETRY("a1", "A1 analogue value [units as configured]")
   TELEM_A2,                       LUA_EXPORT_TELEMETRY("a2", "A2 analogue value [units as configured]")
-#if !defined(CPUARM)        
+#if !defined(FRSKY_SPORT_A3_A4)
   TELEM_A_LAST=TELEM_A2,        
 #else       
   TELEM_A3,                       LUA_EXPORT_TELEMETRY("a3", "A3 analogue value [units as configured]")
@@ -1095,7 +1095,7 @@ enum TelemetrySource {
   TELEM_MIN_A_FIRST,
   TELEM_MIN_A1=TELEM_MIN_A_FIRST, LUA_EXPORT_TELEMETRY("a1-min", "A1 analogue value minimum [units as configured]")
   TELEM_MIN_A2,                   LUA_EXPORT_TELEMETRY("a2-min", "A2 analogue value minimum [units as configured]")
-#if !defined(CPUARM)
+#if !defined(FRSKY_SPORT_A3_A4)
   TELEM_MIN_A_LAST=TELEM_MIN_A2,
 #else
   TELEM_MIN_A3,                   LUA_EXPORT_TELEMETRY("a3-min", "A3 analogue value minimum [units as configured]")
@@ -1194,7 +1194,7 @@ enum FrskyCurrentSource {
   FRSKY_CURRENT_SOURCE_NONE,
   FRSKY_CURRENT_SOURCE_A1,
   FRSKY_CURRENT_SOURCE_A2,
-#if defined(CPUARM)
+#if defined(FRSKY_SPORT_A3_A4)
   FRSKY_CURRENT_SOURCE_A3,
   FRSKY_CURRENT_SOURCE_A4,
 #endif
@@ -1205,7 +1205,7 @@ enum FrskyCurrentSource {
 enum FrskyVoltsSource {
   FRSKY_VOLTS_SOURCE_A1,
   FRSKY_VOLTS_SOURCE_A2,
-#if defined(CPUARM)
+#if defined(FRSKY_SPORT_A3_A4)
   FRSKY_VOLTS_SOURCE_A3,
   FRSKY_VOLTS_SOURCE_A4,
 #endif
@@ -1238,15 +1238,23 @@ PACK(typedef struct t_FrSkyData {
 }) FrSkyData;
 #define MIN_BLADES -1   // 1 blade
 #define MAX_BLADES 126  // 128 blades
+
+#else
+
+#if defined(FRSKY_SPORT_A3_A4)
+#define MAX_FRSKY_A_CHANNELS 4
+#define MAX_FRSKY_BITS 4
 #else
 #define MAX_FRSKY_A_CHANNELS 2
+#define MAX_FRSKY_BITS 2
+#endif
 #define MAX_FRSKY_SCREENS 2
 PACK(typedef struct t_FrSkyData {
   FrSkyChannelData channels[MAX_FRSKY_A_CHANNELS];
-  uint8_t usrProto:2; // Protocol in FrSky user data, 0=None, 1=FrSky hub, 2=WS HowHigh, 3=Halcyon
-  uint8_t blades:2;   // How many blades for RPMs, 0=2 blades
-  uint8_t screensType:2;
-  uint8_t voltsSource:2;
+  uint8_t usrProto:MAX_FRSKY_BITS; // Protocol in FrSky user data, 0=None, 1=FrSky hub, 2=WS HowHigh, 3=Halcyon
+  uint8_t blades:MAX_FRSKY_BITS;   // How many blades for RPMs, 0=2 blades
+  uint8_t screensType:MAX_FRSKY_BITS;
+  uint8_t voltsSource:MAX_FRSKY_BITS;
   int8_t  varioMin:4;
   int8_t  varioMax:4;
   FrSkyRSSIAlarm rssiAlarms[2];

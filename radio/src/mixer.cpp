@@ -338,14 +338,14 @@ getvalue_t getValue(uint8_t i)
 #endif
   else if (i<=MIXSRC_FIRST_TELEM-1+TELEM_TIMER2) return timersStates[i-MIXSRC_FIRST_TELEM+1-TELEM_TIMER1].val;
 #if defined(FRSKY)
-#if defined(CPUARM)
+#if defined(FRSKY_SPORT_SWR)
   else if (i==MIXSRC_FIRST_TELEM-1+TELEM_SWR) return frskyData.swr.value;
 #endif
   else if (i==MIXSRC_FIRST_TELEM-1+TELEM_RSSI_TX) return frskyData.rssi[1].value;
   else if (i==MIXSRC_FIRST_TELEM-1+TELEM_RSSI_RX) return frskyData.rssi[0].value;
   else if (i==MIXSRC_FIRST_TELEM-1+TELEM_A1) return frskyData.analog[TELEM_ANA_A1].value;
   else if (i==MIXSRC_FIRST_TELEM-1+TELEM_A2) return frskyData.analog[TELEM_ANA_A2].value;
-#if defined(CPUARM)
+#if defined(FRSKY_SPORT_A3_A4)
   else if (i==MIXSRC_FIRST_TELEM-1+TELEM_A3) return frskyData.analog[TELEM_ANA_A3].value;
   else if (i==MIXSRC_FIRST_TELEM-1+TELEM_A4) return frskyData.analog[TELEM_ANA_A4].value;
 #endif
@@ -377,7 +377,7 @@ getvalue_t getValue(uint8_t i)
   else if (i==MIXSRC_FIRST_TELEM-1+TELEM_DTE) return frskyData.hub.dTE;
   else if (i<=MIXSRC_FIRST_TELEM-1+TELEM_MIN_A1) return frskyData.analog[TELEM_ANA_A1].min;
   else if (i==MIXSRC_FIRST_TELEM-1+TELEM_MIN_A2) return frskyData.analog[TELEM_ANA_A2].min;
-#if defined(CPUARM)
+#if defined(FRSKY_SPORT_A3_A4)
   else if (i==MIXSRC_FIRST_TELEM-1+TELEM_MIN_A3) return frskyData.analog[TELEM_ANA_A3].min;
   else if (i==MIXSRC_FIRST_TELEM-1+TELEM_MIN_A4) return frskyData.analog[TELEM_ANA_A4].min;
 #endif
