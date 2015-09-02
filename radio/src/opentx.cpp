@@ -798,7 +798,7 @@ ls_telemetry_value_t maxTelemValue(uint8_t channel)
       return 60*60;
 #endif
     case TELEM_FUEL:
-#if defined(CPUARM)
+#if defined(FRSKY_SPORT_SWR)
     case TELEM_SWR:
 #endif
     case TELEM_RSSI_TX:
@@ -873,7 +873,7 @@ getvalue_t convert8bitsTelemValue(uint8_t channel, ls_telemetry_value_t value)
       break;
 #if defined(FRSKY)
     case TELEM_ALT:
-#if defined(CPUARM)
+#if defined(FRSKY_SPORT)
       result = 100 * (value * 8 - 500);
       break;
 #endif
@@ -1737,19 +1737,19 @@ PLAY_FUNCTION(playValue, uint8_t idx)
     case MIXSRC_FIRST_TELEM+TELEM_TIMER2-1:
       PLAY_DURATION(val, 0);
       break;
-#if defined(CPUARM) && defined(FRSKY)
+#if defined(FRSKY)
+#if defined(FRSKY_SPORT_SWR)
     case MIXSRC_FIRST_TELEM+TELEM_SWR-1:
       PLAY_NUMBER(val, 0, 0);
       break;
 #endif
-#if defined(FRSKY)
     case MIXSRC_FIRST_TELEM+TELEM_RSSI_TX-1:
     case MIXSRC_FIRST_TELEM+TELEM_RSSI_RX-1:
       PLAY_NUMBER(val, 1+UNIT_DBM, 0);
       break;
     case MIXSRC_FIRST_TELEM+TELEM_MIN_A1-1:
     case MIXSRC_FIRST_TELEM+TELEM_MIN_A2-1:
-#if defined(CPUARM)
+#if defined(FRSKY_SPORT_A3_A4)
     case MIXSRC_FIRST_TELEM+TELEM_MIN_A3-1:
     case MIXSRC_FIRST_TELEM+TELEM_MIN_A4-1:
 #endif
@@ -1757,7 +1757,7 @@ PLAY_FUNCTION(playValue, uint8_t idx)
       // no break
     case MIXSRC_FIRST_TELEM+TELEM_A1-1:
     case MIXSRC_FIRST_TELEM+TELEM_A2-1:
-#if defined(CPUARM)
+#if defined(FRSKY_SPORT_A3_A4)
     case MIXSRC_FIRST_TELEM+TELEM_A3-1:
     case MIXSRC_FIRST_TELEM+TELEM_A4-1:
 #endif

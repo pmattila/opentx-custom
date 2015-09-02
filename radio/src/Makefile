@@ -21,10 +21,10 @@
 DATA_DIR = /tmp
 
 # Backup the old flash (YES, NO)
-BACKUP_FLASH = YES
+BACKUP_FLASH = NO
 
 # Backup the old EEPROM (YES, NO)
-BACKUP_EEPROM = YES
+BACKUP_EEPROM = NO
 
 # Restore EEPROM to 9x (YES, NO) (will set BACKUP_EEPROM to YES).
 RESTORE_EEPROM = NO
@@ -61,7 +61,7 @@ PCBREV =
 # For this option you need to modify your hardware!
 # More information at [insertURLhere]
 # Values = STD, FRSKY, FRSKY_SPORT, JETI, NMEA, ARDUPILOT, MAVLINK, TELEMETREZ
-EXT = FRSKY
+EXT = FRSKY_SPORT
 
 # FAI mode
 # Values = YES, NO, CHOICE
@@ -74,6 +74,10 @@ FAI = NO
 # if you have a 0 value (50% ) for throttle, while throttle warning is active, you should activate this switch
 # Values = YES, NO
 TURNIGY_TRANSMITTER_FIX = NO
+
+# Stock sticks replaced by FrSky ones
+# Values = YES, NO 
+FRSKY_STICKS = NO
 
 # Enable heli menu
 # Values = YES, NO
@@ -96,10 +100,6 @@ NAVIGATION = NO
 # Switches automatic selection
 # Values = YES, NO 
 AUTOSWITCH = YES
-
-# Stock sticks replaced by FrSky ones
-# Values = YES, NO 
-FRSKY_STICKS = NO
 
 # Sources automatic selection
 # Values = YES, NO 
@@ -222,7 +222,7 @@ HUBSAN = NO
 # Values = YES, NO
 TX_CADDY = NO
 
-#IR protocols (SILV / TRAC09 / PICZ / SWIFT)
+# IR protocols (SILV / TRAC09 / PICZ / SWIFT)
 IRPROTOS = NO
 
 # TRANSLATIONS
@@ -1047,7 +1047,7 @@ ifeq ($(EXT), $(filter $(EXT), FRSKY FRSKY_SPORT TELEMETREZ))
   CPPDEFS += -DFRSKY
   ifeq ($(EXT), FRSKY_SPORT)
     CPPSRC += telemetry/frsky.cpp telemetry/frsky_sport.cpp telemetry/frsky_d.cpp
-    CPPDEFS += -DFRSKY_SPORT
+    CPPDEFS += -DFRSKY_SPORT -DFRSKY_HUB
   else
     CPPSRC += telemetry/frsky.cpp telemetry/frsky_d.cpp
   endif

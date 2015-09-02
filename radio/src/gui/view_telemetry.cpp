@@ -215,7 +215,7 @@ void displayVoltagesScreen()
   switch (g_model.frsky.voltsSource) {
     case FRSKY_VOLTS_SOURCE_A1:
     case FRSKY_VOLTS_SOURCE_A2:
-#if defined(CPUARM)
+#if defined(FRSKY_SPORT_A3_A4)
     case FRSKY_VOLTS_SOURCE_A3:
     case FRSKY_VOLTS_SOURCE_A4:
 #endif
@@ -237,7 +237,7 @@ void displayVoltagesScreen()
     switch(g_model.frsky.currentSource) {
       case FRSKY_CURRENT_SOURCE_A1:
       case FRSKY_CURRENT_SOURCE_A2:
-#if defined(CPUARM)
+#if defined(FRSKY_SPORT_A3_A4)
       case FRSKY_CURRENT_SOURCE_A3:
       case FRSKY_CURRENT_SOURCE_A4:
 #endif
@@ -254,7 +254,7 @@ void displayVoltagesScreen()
     putsTelemetryChannel(3*FW+4+4*FW+6*FW+FW, 5*FH, TELEM_CONSUMPTION-1, frskyData.hub.currentConsumption, DBLSIZE);
   }
   else {
-#if defined(CPUARM)
+#if defined(FRSKY_SPORT_A3_A4)
     displayVoltageScreenLine(analog > 0 ? 5*FH : 4*FH, analog==1+FRSKY_VOLTS_SOURCE_A1 ? FRSKY_VOLTS_SOURCE_A2 : FRSKY_VOLTS_SOURCE_A1);
 #else
     displayVoltageScreenLine(analog > 0 ? 5*FH : 4*FH, analog ? 2-analog : 0);
