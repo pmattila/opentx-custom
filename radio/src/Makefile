@@ -1537,23 +1537,23 @@ DATE = ${shell sh -c "date +%F:%T" }
 AVRCOMMAND = $(AVRDUDE) $(AVRDEVICE)
 
 WRITE_COMMAND = $(AVRCOMMAND) -U flash:w:opentx.hex:i
+
 ifeq ($(RESTORE_EEPROM), YES)
-  BACKUP_EEPROM = YES
   ifeq ($(DOUBLE_WRITE_OK), YES)
-    WRITE_COMMAND += -U eeprom:w:$(DATA_DIR)/eeprom-$(DATE).hex:i
+    WRITE_COMMAND += -U eeprom:w:oldeeprom.hex:i
   else
-    SECOND_WRITE_COMMAND = -U eeprom:w:$(DATA_DIR)/eeprom-$(DATE).hex:i
+    SECOND_WRITE_COMMAND = -U eeprom:w:oldeeprom.hex:i
   endif
 endif
 
-ifeq ($(BACKUP_FLASH), YES)
-  BACKUP_ARGS += -U eeprom:r:$(DATA_DIR)/eeprom-$(DATE).hex:i $(BACKUPFLASH)
-endif
 ifeq ($(BACKUP_EEPROM), YES)
-  BACKUP_ARGS += -U flash:r:$(DATA_DIR)/opentx-$(DATE).hex:i
+  BACKUP_ARGS += -U eeprom:r:oldeeprom.hex:i
+endif
+ifeq ($(BACKUP_FLASH), YES)
+  BACKUP_ARGS += -U flash:r:oldflash.hex:i
 endif
 
-install: all
+install:
 ifdef BACKUP_ARGS
 	$(AVRCOMMAND) $(BACKUP_ARGS)
 	$(SLEEP) $(DELAY)
@@ -1561,7 +1561,7 @@ endif
 	$(WRITE_COMMAND)
 ifdef	SECOND_WRITE_COMMAND
 	$(SLEEP) $(DELAY)
-	$(SECOND_WRITE_COMMAND)
+	$(AVRCOMMAND) $(SECOND_WRITE_COMMAND)
 endif
 
 #### GOOGLE TESTS 
