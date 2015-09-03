@@ -30,6 +30,7 @@
 #define TEMPLATES
 #define FRSKY
 #define FRSKY_HUB
+#define FRSKY_SPORT
 #define WS_HOW_HIGH
 #define PXX
 #define DSM2
@@ -89,6 +90,7 @@ namespace OpenTxM64 {
 #include "radio/src/targets/simu/simpgmspace.cpp"
 #include "radio/src/telemetry/frsky.cpp"
 #include "radio/src/telemetry/frsky_d.cpp"
+#include "radio/src/telemetry/frsky_sport.cpp"
 #include "radio/src/templates.cpp"
 #include "radio/src/translations.cpp"
 #include "radio/src/fonts.cpp"
