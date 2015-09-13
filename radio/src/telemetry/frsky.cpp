@@ -653,7 +653,7 @@ void frskySetCellVoltage(uint8_t battnumber, frskyCellVoltage_t cellVolts)
 
     if (cellVolts != 0) {
       frskyData.hub.cellsState |= (1 << battnumber);
-      if (frskyData.hub.cellsState == (1<<frskyData.hub.cellsCount)-1) {
+      if (frskyData.hub.cellsState == ((uint16_t)1<<frskyData.hub.cellsCount)-1) {
         // we received voltage of all cells
         frskyData.hub.cellsState = 0;
 

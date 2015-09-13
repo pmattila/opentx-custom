@@ -156,9 +156,9 @@ PACK(struct FrskySerialData {
     uint16_t maxGpsSpeed;
     uint16_t maxGpsDistance;
     uint16_t maxAirSpeed;
-    int16_t  minCell;
-    int16_t  minCells;
-    int16_t  minVfas;
+    uint16_t  minCell;
+    uint16_t  minCells;
+    uint16_t  minVfas;
     uint16_t maxCurrent;
     uint16_t maxPower;
     /* end */
@@ -178,7 +178,7 @@ PACK(struct FrskySerialData {
     uint8_t  cellsCount;
     uint8_t  sensorCellsCount[2];
     uint16_t cellVolts[12];
-    int16_t  cellsSum;
+    uint16_t  cellsSum;
     uint16_t cellsState;
     uint16_t minCellVolts;
 
