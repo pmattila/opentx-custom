@@ -303,7 +303,7 @@ void generalDefault()
   memclear(&g_eeGeneral, sizeof(g_eeGeneral));
   g_eeGeneral.version  = EEPROM_VER;
   g_eeGeneral.variant = EEPROM_VARIANT;
-  g_eeGeneral.contrast = 25;
+  g_eeGeneral.contrast = 32;
 
 #if defined(PCBTARANIS)
   g_eeGeneral.vBatWarn = 65;
@@ -321,11 +321,9 @@ void generalDefault()
   g_eeGeneral.templateSetup = 17; /* TAER */
 #endif
 
-#if !defined(CPUM64)
   g_eeGeneral.backlightMode = e_backlight_mode_all;
   g_eeGeneral.lightAutoOff = 2;
   g_eeGeneral.inactivityTimer = 10;
-#endif
 
 #if defined(CPUARM)
   g_eeGeneral.wavVolume = 2;
