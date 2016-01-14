@@ -358,7 +358,7 @@ void StopEepromThread();
   void StartAudioThread(int volumeGain = 10);
   void StopAudioThread(void);
 #else
-  #define StartAudioThread()
+  #define StartAudioThread(volumeGain)
   #define StopAudioThread()
 #endif
 
