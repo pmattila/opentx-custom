@@ -51,8 +51,8 @@ DELAY = 5
 # PCB version
 # Values: 9X, 9X128, 9X2561, 9XR, 9XR128, 9XR2561, GRUVIN9X, MEGA2560, SKY9X, 9XRPRO, TARANIS 
 # Old values STD and STD128 are mapped to 9X and 9X128 for compatibility
-PCB = 9X
-#PCB = 9X2561
+#PCB = 9X
+PCB = 9X2561
 
 # PCB revision
 PCBREV =
@@ -187,15 +187,15 @@ WS_HOW_HIGH = NO
 
 # Gauges in Telemetry screen
 # Values = YES, NO
-GAUGES = NO
+GAUGES = YES
 
 # GPS
 # Values = YES, NO
-GPS = NO
+GPS = YES
 
 # Vario 
 # Values = YES, NO
-VARIO = NO
+VARIO = YES
 
 # RTCLOCK
 # Values = YES, NO
@@ -207,7 +207,7 @@ RTCLOCK = NO
 BLUETOOTH = NO
 
 # PXX (FrSky PCM) protocol
-PXX = YES
+PXX = NO
 
 # DSM2 (Spektrum) protocol
 # Values = NO, SERIAL, PPM
@@ -215,7 +215,7 @@ DSM2 = PPM
 
 # HUBSAN protocol
 # Values = NO, YES
-HUBSAN = NO
+HUBSAN = YES
 
 # DSM/PPM TX caddy PCB (Gruvin)
 # For auto-switching switching between DSM2/X and Fr-Sky transmitter modules
@@ -266,7 +266,7 @@ CURVES = YES
 
 # Global Vars
 # Values = YES, NO
-GVARS = NO
+GVARS = YES
 
 # Enable another 3 positions switch to replace a pot
 # Values = NO, POT1, POT2, POT3,
