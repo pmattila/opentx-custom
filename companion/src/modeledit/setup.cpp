@@ -197,19 +197,25 @@ void ModulePanel::update()
       case PXX_XJT_X16:
       case PXX_XJT_D8:
       case PXX_XJT_LR12:
+        mask |= MASK_CHANNELS_COUNT | MASK_CHANNELS_RANGE | MASK_FAILSAFES | MASK_RX_NUMBER;
+        break;
       case PXX_DJT:
-        mask |= MASK_CHANNELS_RANGE | MASK_CHANNELS_COUNT;
-        if ((protocol==PXX_XJT_X16) || (protocol==PXX_XJT_LR12)) mask |= MASK_FAILSAFES | MASK_RX_NUMBER;
+        mask |= MASK_RX_NUMBER;
+        module.channelsCount = 8;
         break;
       case LP45:
       case DSM2:
       case DSMX:
-        mask |= MASK_CHANNELS_RANGE | MASK_RX_NUMBER;
+        mask |= MASK_RX_NUMBER;
+        if (IS_ARM(firmware->getBoard())) mask |= MASK_CHANNELS_RANGE;
         module.channelsCount = 6;
         max_rx_num = 20;
         break;
       case PPM:
-        mask |= MASK_PPM_FIELDS | MASK_CHANNELS_RANGE| MASK_CHANNELS_COUNT;
+      case PPMSIM:
+      case PPM16:
+        mask |= MASK_PPM_FIELDS | MASK_CHANNELS_COUNT;
+        if (IS_ARM(firmware->getBoard())) mask |= MASK_CHANNELS_RANGE;
         break;
       case OFF:
       default:
@@ -217,7 +223,7 @@ void ModulePanel::update()
     }
   }
   else if (!IS_TARANIS(firmware->getBoard()) || model.trainerMode != 0) {
-    mask |= MASK_PPM_FIELDS | MASK_CHANNELS_RANGE | MASK_CHANNELS_COUNT;
+    mask |= MASK_PPM_FIELDS | MASK_CHANNELS_COUNT;
   }
 
   ui->label_protocol->setVisible(mask & MASK_PROTOCOL);
@@ -229,8 +235,8 @@ void ModulePanel::update()
   ui->label_channelsStart->setVisible(mask & MASK_CHANNELS_RANGE);
   ui->channelsStart->setVisible(mask & MASK_CHANNELS_RANGE);
   ui->channelsStart->setValue(module.channelsStart+1);
-  ui->label_channelsCount->setVisible(mask & MASK_CHANNELS_RANGE);
-  ui->channelsCount->setVisible(mask & MASK_CHANNELS_RANGE);
+  ui->label_channelsCount->setVisible(1);
+  ui->channelsCount->setVisible(1);
   ui->channelsCount->setEnabled(mask & MASK_CHANNELS_COUNT);
   ui->channelsCount->setValue(module.channelsCount);
   ui->channelsCount->setSingleStep(firmware->getCapability(HasPPMStart) ? 1 : 2);
