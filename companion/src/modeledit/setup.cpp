@@ -197,9 +197,9 @@ void ModulePanel::update()
       case PXX_XJT_X16:
       case PXX_XJT_D8:
       case PXX_XJT_LR12:
+        mask |= MASK_FAILSAFES;
       case PXX_DJT:
-        mask |= MASK_CHANNELS_RANGE | MASK_CHANNELS_COUNT;
-        if ((protocol==PXX_XJT_X16) || (protocol==PXX_XJT_LR12)) mask |= MASK_FAILSAFES | MASK_RX_NUMBER;
+        mask |= MASK_CHANNELS_COUNT | MASK_CHANNELS_RANGE | MASK_RX_NUMBER;
         break;
       case LP45:
       case DSM2:
