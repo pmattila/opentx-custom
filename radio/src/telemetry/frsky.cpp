@@ -624,7 +624,7 @@ void telemetryInit(void)
     telemetryPortInit(FRSKY_D_BAUDRATE);
   }
 #elif !defined(SIMU)
-  telemetryPortInit();
+  telemetryPortInit(FRSKY_D_BAUDRATE);
 #endif
 
   // we don't reset the telemetry here as we would also reset the consumption after model load
