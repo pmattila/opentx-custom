@@ -281,15 +281,7 @@ enum AlarmsCheckSteps {
 void telemetryWakeup()
 {
 #if defined(FRSKY_SPORT)
-  uint8_t requiredTelemetryProtocol;
-#if defined(CPUARM)
-  requiredTelemetryProtocol = MODEL_TELEMETRY_PROTOCOL();
-#else
-  if (g_model.protocol == PROTO_PXX)
-    requiredTelemetryProtocol = PROTOCOL_FRSKY_SPORT;
-  else
-    requiredTelemetryProtocol = PROTOCOL_FRSKY_D;
-#endif
+  uint8_t requiredTelemetryProtocol = MODEL_TELEMETRY_PROTOCOL();
   if (telemetryProtocol != requiredTelemetryProtocol) {
     telemetryProtocol = requiredTelemetryProtocol;
     telemetryInit();
