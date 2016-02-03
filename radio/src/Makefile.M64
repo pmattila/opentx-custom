@@ -52,7 +52,6 @@ DELAY = 5
 # Values: 9X, 9X128, 9X2561, 9XR, 9XR128, 9XR2561, GRUVIN9X, MEGA2560, SKY9X, 9XRPRO, TARANIS 
 # Old values STD and STD128 are mapped to 9X and 9X128 for compatibility
 PCB = 9X
-#PCB = 9X2561
 
 # PCB revision
 PCBREV =
@@ -134,7 +133,7 @@ ACCURAT_THROTTLE_STATS = YES
 
 # HAPTIC Mods
 # Values = YES, NO 
-HAPTIC = YES
+HAPTIC = NO
 
 # SmartieParts 2.2 Backlight support (inverted)
 # Values = YES, NO 
@@ -266,7 +265,7 @@ CURVES = YES
 
 # Global Vars
 # Values = YES, NO
-GVARS = NO
+GVARS = YES
 
 # Enable another 3 positions switch to replace a pot
 # Values = NO, POT1, POT2, POT3,
