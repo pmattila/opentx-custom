@@ -61,7 +61,7 @@ PCBREV =
 # For this option you need to modify your hardware!
 # More information at [insertURLhere]
 # Values = STD, FRSKY, FRSKY_SPORT, JETI, NMEA, ARDUPILOT, MAVLINK, TELEMETREZ
-EXT = FRSKY_SPORT
+EXT = STD
 
 # FAI mode
 # Values = YES, NO, CHOICE
