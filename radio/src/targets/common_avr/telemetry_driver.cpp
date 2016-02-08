@@ -163,6 +163,11 @@ void telemetryTransmitBuffer()
 
 void telemetryPortInit(uint32_t baudrate)
 {
+  TRACE("telemetryPortInit(%d)", baudrate);
+
+  telemetryEnableTx();
+  frskyTxBufferCount = 0;
+  telemetryEnableRx();
 }
 
 void telemetryTransmitBuffer()

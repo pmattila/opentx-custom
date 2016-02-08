@@ -161,6 +161,8 @@ NOINLINE void processSerialData(uint8_t data)
 {
   static uint8_t dataState = STATE_DATA_IDLE;
 
+  TRACE("SerialData: %02X", data);
+
 #if defined(BLUETOOTH)
   // TODO if (g_model.bt_telemetry)
   btPushByte(data);
@@ -602,7 +604,9 @@ void telemetryReset()
 
 void telemetryInit(void)
 {
+  TRACE("telemetryInit()");
 #if defined(FRSKY_SPORT)
+  TRACE(" protocol: %d", telemetryProtocol);
   if (telemetryProtocol == PROTOCOL_FRSKY_SPORT) {
     telemetryPortInit(FRSKY_SPORT_BAUDRATE);
   }
@@ -615,7 +619,7 @@ void telemetryInit(void)
   else {
     telemetryPortInit(FRSKY_D_BAUDRATE);
   }
-#elif !defined(SIMU)
+#else
   telemetryPortInit(FRSKY_D_BAUDRATE);
 #endif
 

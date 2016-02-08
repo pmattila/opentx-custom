@@ -55,9 +55,9 @@ class OpenTxM64Simulator : public SimulatorInterface {
 
     virtual const char * getError();
 
-    virtual void sendTelemetry(uint8_t * data, unsigned int len) {};
+    virtual void sendTelemetry(uint8_t * data, unsigned int len);
 
-    virtual void setTrainerInput(unsigned int inputNumber, int16_t value) {};
+    virtual void setTrainerInput(unsigned int inputNumber, int16_t value);
 
     virtual void installTraceHook(void (*callback)(const char *)) {};
 };

@@ -220,3 +220,26 @@ const char * OpenTxM2561Simulator::getError()
 #define GETERROR_IMPORT
 #include "simulatorimport.h"
 }
+
+void OpenTxM2561Simulator::sendTelemetry(::uint8_t * data, unsigned int len) 
+{
+  processSerialData(START_STOP);
+  while (len>0) {
+    if ((*data == BYTESTUFF) || (*data == START_STOP)) {
+      processSerialData(BYTESTUFF);
+      processSerialData(*data ^ STUFF_MASK);
+    } else {
+      processSerialData(*data);
+    }
+    data++;
+    len--;
+  }
+  processSerialData(START_STOP);
+}
+
+void OpenTxM2561Simulator::setTrainerInput(unsigned int inputNumber, ::int16_t value)
+{
+#define SETTRAINER_IMPORT
+#include "simulatorimport.h"
+}
+

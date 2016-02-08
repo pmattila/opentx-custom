@@ -452,6 +452,8 @@ void frskyDProcessPacket(uint8_t *packet);
 // FrSky S.PORT Protocol
 void frskySportProcessPacket(uint8_t *packet);
 
+void processSerialData(uint8_t data);
+
 void telemetryWakeup(void);
 void telemetryReset();
 void telemetryInit(void);

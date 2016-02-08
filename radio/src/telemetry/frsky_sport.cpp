@@ -201,8 +201,8 @@ void frskySportProcessPacket(uint8_t *packet)
     return;
   }
 
-  // TRACE("frskySportProcessPacket(): ");
-  // DUMP(packet, FRSKY_SPORT_PACKET_SIZE);
+  TRACE("frskySportProcessPacket(): ");
+  DUMP(packet, FRSKY_SPORT_PACKET_SIZE);
 
   switch (prim)
   {
