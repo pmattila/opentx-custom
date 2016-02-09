@@ -107,6 +107,8 @@ ISR(USART0_RX_vect)
 
 #if !defined(SIMU)
 
+#define BAUD_TOL 1
+
 void telemetryPortInit9600()
 {
   #undef BAUD
@@ -116,7 +118,11 @@ void telemetryPortInit9600()
   UBRR0H = UBRRH_VALUE;
   UBRR0L = UBRRL_VALUE;
 
-  UCSR0A &= ~(1 << U2X0); // disable double speed operation.
+#if USE_2X
+   UCSR0A |=  (1 << U2X0);
+#else
+   UCSR0A &= ~(1 << U2X0);
+#endif
 }
 
 void telemetryPortInit57600()
@@ -128,7 +134,11 @@ void telemetryPortInit57600()
   UBRR0H = UBRRH_VALUE;
   UBRR0L = UBRRL_VALUE;
 
-  UCSR0A &= ~(1 << U2X0); // disable double speed operation.
+#if USE_2X
+   UCSR0A |=  (1 << U2X0);
+#else
+   UCSR0A &= ~(1 << U2X0);
+#endif
 }
 
 void telemetryPortInit(uint32_t baudrate)
@@ -148,9 +158,8 @@ void telemetryPortInit(uint32_t baudrate)
   while (UCSR0A & (1 << RXC0)) UDR0; // flush receive buffer
 
   // These should be running right from power up on a FrSky enabled '9X.
-  telemetryEnableTx(); // enable FrSky-Telemetry emission
   frskyTxBufferCount = 0; // TODO not driver code
-
+  telemetryEnableTx(); // enable FrSky-Telemetry emission
   telemetryEnableRx(); // enable FrSky-Telemetry reception
 }
 
@@ -165,9 +174,7 @@ void telemetryPortInit(uint32_t baudrate)
 {
   TRACE("telemetryPortInit(%d)", baudrate);
 
-  telemetryEnableTx();
   frskyTxBufferCount = 0;
-  telemetryEnableRx();
 }
 
 void telemetryTransmitBuffer()
