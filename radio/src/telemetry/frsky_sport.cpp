@@ -233,6 +233,9 @@ void frskySportProcessPacket(uint8_t *packet)
 #if defined(FRSKY_SPORT_SWR)
       else if (appId == SWR_ID) {
         frskyData.swr.set(SPORT_DATA_U8(packet));
+#if defined(FRSKY_SPORT_SWR_RSSI)
+        frskyData.rssi[1].set(100 - SPORT_DATA_U8(packet));
+#endif
       }
 #endif
 #endif

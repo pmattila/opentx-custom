@@ -31,6 +31,8 @@
 #define FRSKY
 #define FRSKY_HUB
 #define FRSKY_SPORT
+#define FRSKY_SPORT_SWR
+#define FRSKY_SPORT_SWR_RSSI
 #define WS_HOW_HIGH
 #define PXX
 #define DSM2
