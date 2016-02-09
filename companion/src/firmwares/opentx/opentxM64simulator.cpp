@@ -223,6 +223,11 @@ const char * OpenTxM64Simulator::getError()
 #include "simulatorimport.h"
 }
 
+void OpenTxM64Simulator::sendTelemetryByte(::uint8_t data) 
+{
+  processSerialData(data);
+}
+
 void OpenTxM64Simulator::sendTelemetry(::uint8_t * data, unsigned int len) 
 {
   processSerialData(START_STOP);

@@ -28,7 +28,10 @@ class TelemetrySimulator : public QDialog
     Ui::TelemetrySimulator * ui;
     QTimer * timer;
     SimulatorInterface *simulator;
+    uint8_t * data_ptr;
+    int data_cnt;
 
+    void replayTelemetryFrame();
     void generateTelemetryFrame();
 
   private slots:

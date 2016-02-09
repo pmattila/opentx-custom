@@ -82,6 +82,8 @@ class SimulatorInterface {
 
     virtual void sendTelemetry(uint8_t * data, unsigned int len) = 0;
 
+    virtual void sendTelemetryByte(uint8_t data) { };
+
     virtual void setTrainerInput(unsigned int inputNumber, int16_t value) = 0;
 
     virtual void installTraceHook(void (*callback)(const char *)) = 0;

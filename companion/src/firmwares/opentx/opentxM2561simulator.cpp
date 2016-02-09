@@ -222,6 +222,11 @@ const char * OpenTxM2561Simulator::getError()
 #include "simulatorimport.h"
 }
 
+void OpenTxM2561Simulator::sendTelemetryByte(::uint8_t data) 
+{
+  processSerialData(data);
+}
+
 void OpenTxM2561Simulator::sendTelemetry(::uint8_t * data, unsigned int len) 
 {
   processSerialData(START_STOP);

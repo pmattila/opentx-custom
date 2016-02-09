@@ -2,17 +2,20 @@
 #include "telemetrysimu.h"
 #include "ui_telemetrysimu.h"
 #include "radio/src/telemetry/frsky.h"
+#include "sportdata.h"
 
 TelemetrySimulator::TelemetrySimulator(QWidget * parent, SimulatorInterface * simulator):
   QDialog(parent),
   ui(new Ui::TelemetrySimulator),
-  simulator(simulator)
+  simulator(simulator),
+  data_ptr(0),
+  data_cnt(0)
 {
   ui->setupUi(this);
 
   timer = new QTimer(this);
   connect(timer, SIGNAL(timeout()), this, SLOT(onTimerEvent()));
-  timer->start(100);
+  timer->start(50);
 }
 
 TelemetrySimulator::~TelemetrySimulator()
@@ -24,7 +27,7 @@ TelemetrySimulator::~TelemetrySimulator()
 void TelemetrySimulator::onTimerEvent()
 {
   if (ui->Simulate->isChecked()) {
-    generateTelemetryFrame();
+    replayTelemetryFrame();
   }
 }
 
@@ -55,6 +58,20 @@ void generateSportPacket(uint8_t * packet, uint8_t dataId, uint8_t prim, uint16_
   *((uint16_t *)(packet+2)) = appId;
   *((int32_t *)(packet+4)) = data;
   setSportPacketCrc(packet);
+}
+
+void TelemetrySimulator::replayTelemetryFrame()
+{
+  if (data_cnt < 64) {
+    data_ptr = sportdata;
+    data_cnt = sizeof(sportdata);
+  }
+  
+  do {
+    simulator->sendTelemetryByte(*data_ptr);
+    data_ptr++;
+    data_cnt--;
+  } while (*data_ptr != 0x7e);
 }
 
 void TelemetrySimulator::generateTelemetryFrame()
