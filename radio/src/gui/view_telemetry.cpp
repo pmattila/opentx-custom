@@ -205,34 +205,29 @@ void displayVoltagesScreen()
       return;
   }
 #endif
-  // Volts / Amps / Watts / mAh
-  uint8_t analog = 0;
-#if defined(CPUARM)
-  lcd_putsiAtt(0, 2*FH, STR_VOLTSRC, g_model.frsky.voltsSource, 0);
-#else
-  lcd_putsiAtt(0, 2*FH, STR_AMPSRC, g_model.frsky.voltsSource+1, 0);
-#endif
-  switch (g_model.frsky.voltsSource) {
-    case FRSKY_VOLTS_SOURCE_A1:
-    case FRSKY_VOLTS_SOURCE_A2:
-#if defined(FRSKY_SPORT_A3_A4)
-    case FRSKY_VOLTS_SOURCE_A3:
-    case FRSKY_VOLTS_SOURCE_A4:
-#endif
-      displayVoltageScreenLine(2*FH, g_model.frsky.voltsSource);
-      analog = 1+g_model.frsky.voltsSource;
-      break;
-#if defined(FRSKY_HUB)
-    case FRSKY_VOLTS_SOURCE_FAS:
-      putsTelemetryChannel(3*FW+6*FW+4, FH, TELEM_VFAS-1, frskyData.hub.vfas, DBLSIZE);
-      break;
-    case FRSKY_VOLTS_SOURCE_CELLS:
-      putsTelemetryChannel(3*FW+6*FW+4, FH, TELEM_CELLS_SUM-1, frskyData.hub.cellsSum, DBLSIZE);
-      break;
-#endif
-  }
 
+  // Volts / Amps / Watts / mAh
   if (g_model.frsky.currentSource) {
+    lcd_putsiAtt(0, 2*FH, STR_AMPSRC, g_model.frsky.voltsSource+1, 0);
+    switch (g_model.frsky.voltsSource) {
+      case FRSKY_VOLTS_SOURCE_A1:
+      case FRSKY_VOLTS_SOURCE_A2:
+#if defined(FRSKY_SPORT_A3_A4)
+      case FRSKY_VOLTS_SOURCE_A3:
+      case FRSKY_VOLTS_SOURCE_A4:
+#endif
+        displayVoltageScreenLine(2*FH, g_model.frsky.voltsSource);
+        break;
+#if defined(FRSKY_HUB)
+      case FRSKY_VOLTS_SOURCE_FAS:
+        putsTelemetryChannel(3*FW+6*FW+4, FH, TELEM_VFAS-1, frskyData.hub.vfas, DBLSIZE);
+        break;
+      case FRSKY_VOLTS_SOURCE_CELLS:
+        putsTelemetryChannel(3*FW+6*FW+4, FH, TELEM_CELLS_SUM-1, frskyData.hub.cellsSum, DBLSIZE);
+        break;
+#endif
+    }
+
     lcd_putsiAtt(0, 4*FH, STR_AMPSRC, g_model.frsky.currentSource, 0);
     switch(g_model.frsky.currentSource) {
       case FRSKY_CURRENT_SOURCE_A1:
@@ -249,19 +244,35 @@ void displayVoltagesScreen()
         break;
 #endif
     }
-
     putsTelemetryChannel(4, 5*FH, TELEM_POWER-1, frskyData.hub.power, LEFT|DBLSIZE);
     putsTelemetryChannel(3*FW+4+4*FW+6*FW+FW, 5*FH, TELEM_CONSUMPTION-1, frskyData.hub.currentConsumption, DBLSIZE);
   }
   else {
+    lcd_putsiAtt(0, 2*FH, STR_AMPSRC, FRSKY_VOLTS_SOURCE_A1+1, 0);
+    displayVoltageScreenLine(2*FH, FRSKY_VOLTS_SOURCE_A1);
+    lcd_putsiAtt(0, 4*FH, STR_AMPSRC, FRSKY_VOLTS_SOURCE_A2+1, 0);
+    displayVoltageScreenLine(4*FH, FRSKY_VOLTS_SOURCE_A2);
+    switch (g_model.frsky.voltsSource) {
 #if defined(FRSKY_SPORT_A3_A4)
-    displayVoltageScreenLine(analog > 0 ? 5*FH : 4*FH, analog==1+FRSKY_VOLTS_SOURCE_A1 ? FRSKY_VOLTS_SOURCE_A2 : FRSKY_VOLTS_SOURCE_A1);
-#else
-    displayVoltageScreenLine(analog > 0 ? 5*FH : 4*FH, analog ? 2-analog : 0);
+      case FRSKY_VOLTS_SOURCE_A3:
+      case FRSKY_VOLTS_SOURCE_A4:
+        lcd_putsiAtt(0, 6*FH, STR_AMPSRC, g_model.frsky.voltsSource+1, 0);
+        displayVoltageScreenLine(2*FH, g_model.frsky.voltsSource);
+        break;
 #endif
-    if (analog == 0) displayVoltageScreenLine(6*FH, 1);
+#if defined(FRSKY_HUB)
+      case FRSKY_VOLTS_SOURCE_FAS:
+        lcd_putsiAtt(0, 6*FH, STR_AMPSRC, g_model.frsky.voltsSource+1, 0);
+        putsTelemetryChannel(3*FW+6*FW+4, 5*FH, TELEM_VFAS-1, frskyData.hub.vfas, DBLSIZE);
+        break;
+      case FRSKY_VOLTS_SOURCE_CELLS:
+        lcd_putsiAtt(0, 6*FH, STR_AMPSRC, g_model.frsky.voltsSource+1, 0);
+        putsTelemetryChannel(3*FW+6*FW+4, 5*FH, TELEM_CELLS_SUM-1, frskyData.hub.cellsSum, DBLSIZE);
+        break;
+#endif
+    }
   }
-
+  
 #if defined(FRSKY_HUB)
   // Cells voltage
   if (frskyData.hub.cellsCount > 0) {

@@ -440,10 +440,12 @@ void telemetryWakeup()
 
 void telemetryInterrupt10ms()
 {
+  uint16_t voltage = 0;
+  uint16_t current = 0;
+
 #if defined(FRSKY_SPORT)
-  uint16_t voltage = frskyData.hub.cellsSum; /* unit: 1/10 volts */
+  voltage = frskyData.hub.cellsSum;
 #elif defined(FRSKY_HUB)
-  uint16_t voltage = 0; /* unit: 1/10 volts */
   for (uint8_t i=0; i<frskyData.hub.cellsCount; i++)
     voltage += frskyData.hub.cellVolts[i];
   voltage /= (10 / TELEMETRY_CELL_VOLTAGE_MUTLIPLIER);
@@ -455,6 +457,7 @@ void telemetryInterrupt10ms()
 
   if (TELEMETRY_STREAMING()) {
     if (!TELEMETRY_OPENXSENSOR()) {
+
       // power calculation
       uint8_t channel = g_model.frsky.voltsSource;
 #if defined(FRSKY_SPORT_A3_A4)
@@ -473,22 +476,18 @@ void telemetryInterrupt10ms()
       }
 #endif
 
-#if defined(FRSKY_HUB)
-      uint16_t current = frskyData.hub.current; /* unit: 1/10 amps */
-#else
-      uint16_t current = 0;
-#endif
-
-      channel = g_model.frsky.currentSource - FRSKY_CURRENT_SOURCE_A1;
-      if (channel < MAX_FRSKY_A_CHANNELS) {
+      channel = g_model.frsky.currentSource;
+      if (channel > FRSKY_CURRENT_SOURCE_NONE && channel < FRSKY_CURRENT_SOURCE_FAS) {
+	channel -= FRSKY_CURRENT_SOURCE_A1;
         current = applyChannelRatio(channel, frskyData.analog[channel].value) / 10;
       }
-
-#if defined(CPUARM)
-      frskyData.hub.power = (current * voltage) / 100;
-#else
-      frskyData.hub.power = ((current>>1) * (voltage>>1)) / 25;
+#if defined(FRSKY_HUB)
+      else if (channel == FRSKY_CURRENT_SOURCE_FAS) {
+	current = frskyData.hub.current;
+      }
 #endif
+
+      frskyData.hub.power = ((current>>1) * (voltage>>1)) / 25;
 
       frskyData.hub.currentPrescale += current;
       if (frskyData.hub.currentPrescale >= 3600) {
@@ -510,13 +509,13 @@ void telemetryInterrupt10ms()
 
   if (frskyStreaming > 0) {
     frskyStreaming--;
-  }
-  else {
+  } 
 #if !defined(SIMU)
+  else {
     frskyData.rssi[0].set(0);
     frskyData.rssi[1].set(0);
-#endif
   }
+#endif
 }
 
 void telemetryReset()
