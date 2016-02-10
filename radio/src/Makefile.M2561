@@ -1054,7 +1054,7 @@ ifeq ($(EXT), $(filter $(EXT), FRSKY FRSKY_SPORT TELEMETREZ))
   CPPDEFS += -DFRSKY
   ifeq ($(EXT), FRSKY_SPORT)
     CPPSRC += telemetry/frsky.cpp telemetry/frsky_sport.cpp telemetry/frsky_d.cpp
-    CPPDEFS += -DFRSKY_SPORT -DFRSKY_SPORT_SWR -DFRSKY_SPORT_SWR_RSSI -DFRSKY_HUB
+    CPPDEFS += -DFRSKY_SPORT -DFRSKY_SPORT_SWR_RSSI -DFRSKY_HUB
   else
     CPPSRC += telemetry/frsky.cpp telemetry/frsky_d.cpp
   endif

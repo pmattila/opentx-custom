@@ -230,14 +230,14 @@ void frskySportProcessPacket(uint8_t *packet)
       if (appId == XJT_VERSION_ID) {
         frskyData.xjtVersion = HUB_DATA_U16(packet);
       }
-#if defined(FRSKY_SPORT_SWR)
       else if (appId == SWR_ID) {
+#if defined(FRSKY_SPORT_SWR)
         frskyData.swr.set(SPORT_DATA_U8(packet));
+#endif
 #if defined(FRSKY_SPORT_SWR_RSSI)
         frskyData.rssi[1].set(100 - SPORT_DATA_U8(packet));
 #endif
       }
-#endif
 #endif
       else if (frskyData.rssi[0].value > 0) {
         if (appId == ADC1_ID || appId == ADC2_ID) {
