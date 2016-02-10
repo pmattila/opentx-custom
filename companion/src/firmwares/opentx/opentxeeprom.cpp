@@ -6,7 +6,7 @@
 
 #define IS_DBLEEPROM(board, version)         ((board==BOARD_GRUVIN9X || board==BOARD_M128 || board==BOARD_M2561) && version >= 213)
 // Macro used for Gruvin9x board and M128 board between versions 213 and 214 (when there were stack overflows!)
-#define IS_DBLRAM(board, version)            ((board==BOARD_GRUVIN9X && version >= 213) || (board==BOARD_M128 && version >= 213 && version <= 214))
+#define IS_DBLRAM(board, version)            ((board==BOARD_GRUVIN9X && version >= 213) || (board==BOARD_M2561 && version >= 213) || (board==BOARD_M128 && version >= 213 && version <= 214))
 
 #define HAS_PERSISTENT_TIMERS(board)         (IS_ARM(board) || board == BOARD_GRUVIN9X)
 #define HAS_LARGE_LCD(board)                 IS_TARANIS(board)
