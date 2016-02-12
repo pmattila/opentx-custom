@@ -149,11 +149,11 @@ NOINLINE uint8_t getRssiAlarmValue(uint8_t alarm)
 void displayVoltageScreenLine(uint8_t y, uint8_t index)
 {
   putsStrIdx(0, y, STR_A, index+1, 0);
-  if (TELEMETRY_STREAMING()) {
+  //if (TELEMETRY_STREAMING()) {
     putsTelemetryChannel(3*FW+6*FW+4, y-FH, index+TELEM_A1-1, frskyData.analog[index].value, DBLSIZE);
     lcd_putc(12*FW-1, y-FH, '<'); putsTelemetryChannel(17*FW, y-FH, index+TELEM_A1-1, frskyData.analog[index].min, NO_UNIT);
     lcd_putc(12*FW, y, '>');      putsTelemetryChannel(17*FW, y, index+TELEM_A1-1, frskyData.analog[index].max, NO_UNIT);
-  }
+  //}
 }
 
 uint8_t barCoord(int16_t value, int16_t min, int16_t max)
@@ -205,6 +205,8 @@ void displayVoltagesScreen()
       return;
   }
 #endif
+
+  if (TELEMETRY_STREAMING()) {
 
   // Volts / Amps / Watts / mAh
   if (g_model.frsky.currentSource) {
@@ -304,6 +306,7 @@ void displayVoltagesScreen()
     lcd_vline(LCD_W-3*FW-2, 8, 47);
   }
 #endif
+  } // if (TELEMETRY_STREAMING())
 
   displayRssiLine();
 }
