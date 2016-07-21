@@ -522,7 +522,7 @@ void telemetryReset()
 {
   memclear(&frskyData, sizeof(frskyData));
 
-  frskyStreaming = 0; // reset counter only if valid frsky packets are being detected
+  frskyStreaming = 0;
   link_counter = 0;
 
 #if defined(CPUARM)

@@ -415,10 +415,6 @@ int main(int argc,char **argv)
   th9xSim->show(); // Otherwise the main window gets centred across my two monitors, split down the middle.
 #endif
 
-#if defined(FRSKY) && !defined(FRSKY_SPORT)
-  frskyStreaming = 1;
-#endif
-
   printf("Model size = %d\n", (int)sizeof(g_model));
 
   simuInit();

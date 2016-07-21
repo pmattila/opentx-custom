@@ -20,9 +20,6 @@
 
 #ifdef INIT_IMPORT
 #undef INIT_IMPORT
-#ifdef FRSKY
-frskyStreaming = 20;
-#endif
 #endif
 
 #ifdef SETVALUES_IMPORT

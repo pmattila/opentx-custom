@@ -331,7 +331,7 @@ enum AlarmLevel {
 #define ALARM_LEVEL(channel, alarm)       ((g_model.frsky.channels[channel].alarms_level >> (2*alarm)) & 3)
 
 #if defined(FRSKY_SPORT)
-  #define TELEMETRY_STREAMING()           (frskyData.rssi[0].value > 0)
+  #define TELEMETRY_STREAMING()           (frskyStreaming > 0)
 
   #define TELEMETRY_CELL_VOLTAGE_MUTLIPLIER  1
 
