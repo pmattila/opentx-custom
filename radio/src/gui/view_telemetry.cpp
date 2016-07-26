@@ -79,18 +79,18 @@ void displayRssiLine()
     lcd_hline(0, 55, 128, 0); // separator
     uint8_t rssi = min((uint8_t)99, frskyData.rssi[0].value);
     uint8_t attr = (rssi < getRssiAlarmValue(0)) ? BLINK : 0;
-    uint8_t rval = 4*rssi/5; // 0..80
+    uint8_t rval = 4*rssi/5; // 0..79
     uint8_t i;
     lcd_putsAtt(0, STATUS_BAR_Y, "RSSI:", attr); 
     lcd_outdezNAtt(40, STATUS_BAR_Y, rssi, LEADING0, 2);
     lcd_rect(48, 57, 80, 7);
     for (i=8; i<80; i+=8)
-      lcd_hline(48+i,62,1);
-    lcd_filled_rect(49, 58, rval, 5, SOLID);
-    lcd_hline(rval+49,59,1);
-    lcd_hline(rval+49,60,2);
-    lcd_hline(rval+49,61,3);
-    lcd_hline(rval+49,62,4);
+      lcd_hline(48+i,60,1);
+    lcd_hline(49,58,rval);
+    lcd_hline(49,59,rval+1);
+    lcd_hline(49,60,rval+2);
+    lcd_hline(49,61,rval+1);
+    lcd_hline(49,62,rval);
   }
   else {
     lcd_putsAtt(7*FW, STATUS_BAR_Y, STR_NODATA, BLINK);
