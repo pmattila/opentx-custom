@@ -237,7 +237,7 @@ void displayVoltagesScreen()
 #endif
     }
 
-    lcd_putsiAtt(0, 4*FH, STR_AMPSRC, g_model.frsky.currentSource, blink);
+    lcd_putsiAtt(0, 4*FH, STR_AMPSRC, g_model.frsky.currentSource, 0);
     switch(g_model.frsky.currentSource) {
       case FRSKY_CURRENT_SOURCE_A1:
       case FRSKY_CURRENT_SOURCE_A2:
@@ -257,7 +257,7 @@ void displayVoltagesScreen()
     putsTelemetryChannel(3*FW+4+4*FW+6*FW+FW, 5*FH, TELEM_CONSUMPTION-1, frskyData.hub.currentConsumption, DBLSIZE|blink);
   }
   else {
-    lcd_putsiAtt(0, 2*FH, STR_AMPSRC, FRSKY_VOLTS_SOURCE_A1+1, blink);
+    lcd_putsiAtt(0, 2*FH, STR_AMPSRC, FRSKY_VOLTS_SOURCE_A1+1, 0);
     displayVoltageScreenLine(2*FH, FRSKY_VOLTS_SOURCE_A1, blink);
     lcd_putsiAtt(0, 4*FH, STR_AMPSRC, FRSKY_VOLTS_SOURCE_A2+1, 0);
     displayVoltageScreenLine(4*FH, FRSKY_VOLTS_SOURCE_A2, blink);
