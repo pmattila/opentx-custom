@@ -362,7 +362,7 @@ getvalue_t getValue(uint8_t i)
   else if (i==MIXSRC_FIRST_TELEM-1+TELEM_SPEED) return TELEMETRY_GPS_SPEED_BP;
   else if (i==MIXSRC_FIRST_TELEM-1+TELEM_DIST) return frskyData.hub.gpsDistance;
   else if (i==MIXSRC_FIRST_TELEM-1+TELEM_GPSALT) return TELEMETRY_RELATIVE_GPS_ALT_BP;
-  else if (i==MIXSRC_FIRST_TELEM-1+TELEM_CELL) return (int16_t)TELEMETRY_MIN_CELL_VOLTAGE;
+  else if (i==MIXSRC_FIRST_TELEM-1+TELEM_CELL) return (int16_t)frskyData.hub.minCellVolts;
   else if (i==MIXSRC_FIRST_TELEM-1+TELEM_CELLS_SUM) return (int16_t)frskyData.hub.cellsSum;
   else if (i==MIXSRC_FIRST_TELEM-1+TELEM_VFAS) return (int16_t)frskyData.hub.vfas;
   else if (i==MIXSRC_FIRST_TELEM-1+TELEM_CURRENT) return (int16_t)frskyData.hub.current;
@@ -381,6 +381,19 @@ getvalue_t getValue(uint8_t i)
   else if (i==MIXSRC_FIRST_TELEM-1+TELEM_MIN_A3) return frskyData.analog[TELEM_ANA_A3].min;
   else if (i==MIXSRC_FIRST_TELEM-1+TELEM_MIN_A4) return frskyData.analog[TELEM_ANA_A4].min;
 #endif
+  else if (i==MIXSRC_FIRST_TELEM-1+TELEM_MIN_ALT) return frskyData.hub.minAltitude;
+  else if (i==MIXSRC_FIRST_TELEM-1+TELEM_MAX_ALT) return frskyData.hub.maxAltitude;
+  else if (i==MIXSRC_FIRST_TELEM-1+TELEM_MAX_RPM) return frskyData.hub.maxRpm;
+  else if (i==MIXSRC_FIRST_TELEM-1+TELEM_MAX_T1) return frskyData.hub.maxTemperature1;
+  else if (i==MIXSRC_FIRST_TELEM-1+TELEM_MAX_T2) return frskyData.hub.maxTemperature2;
+  else if (i==MIXSRC_FIRST_TELEM-1+TELEM_MAX_SPEED) return frskyData.hub.maxGpsSpeed;
+  else if (i==MIXSRC_FIRST_TELEM-1+TELEM_MAX_DIST) return frskyData.hub.maxGpsDistance;
+  else if (i==MIXSRC_FIRST_TELEM-1+TELEM_MAX_ASPEED) return frskyData.hub.maxAirSpeed;
+  else if (i==MIXSRC_FIRST_TELEM-1+TELEM_MIN_CELL) return frskyData.hub.minCell;
+  else if (i==MIXSRC_FIRST_TELEM-1+TELEM_MIN_CELLS_SUM) return frskyData.hub.minCells;
+  else if (i==MIXSRC_FIRST_TELEM-1+TELEM_MIN_VFAS) return frskyData.hub.minVfas;
+  else if (i==MIXSRC_FIRST_TELEM-1+TELEM_MAX_CURRENT) return frskyData.hub.maxCurrent;
+  else if (i==MIXSRC_FIRST_TELEM-1+TELEM_MAX_POWER) return frskyData.hub.maxPower;
   else if (i<=MIXSRC_FIRST_TELEM-1+TELEM_CSW_MAX) return *(((int16_t*)(&frskyData.hub.minAltitude))+i-(MIXSRC_FIRST_TELEM-1+TELEM_MIN_ALT));
 #endif
 #endif

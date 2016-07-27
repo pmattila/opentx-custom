@@ -891,6 +891,7 @@ getvalue_t convert8bitsTelemValue(uint8_t channel, ls_telemetry_value_t value)
       result = (getvalue_t)value - 30;
       break;
     case TELEM_CELL:
+    case TELEM_MIN_CELL:
     case TELEM_HDG:
     case TELEM_SPEED:
     case TELEM_MAX_SPEED:
