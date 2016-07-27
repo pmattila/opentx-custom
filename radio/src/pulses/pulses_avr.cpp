@@ -310,8 +310,13 @@ void putPcmHead()
 
 uint16_t scaleForPXX( uint8_t i )
 {
-  int16_t value = ( ( i < 16 ) ? channelOutputs[i] * 3 / 4 : 0 ) + 1024;
-  return limit<uint16_t>(1, value, 2046);
+    int16_t value;
+
+    value = channelOutputs[i];
+    value = ( value * 3 / 4 ) + 1024 + limitAddress(i)->ppmCenter;
+    value = limit<uint16_t>(1, value, 2046);
+
+    return value;
 }
 
 void setupPulsesPXX()
