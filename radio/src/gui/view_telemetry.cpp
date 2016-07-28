@@ -76,21 +76,21 @@ void displayRssiLine()
 void displayRssiLine()
 {
   if (TELEMETRY_STREAMING()) {
-    lcd_hline(0, 55, 128, 0); // separator
-    uint8_t rssi = min((uint8_t)99, frskyData.rssi[0].value);
-    uint8_t attr = (rssi < getRssiAlarmValue(0)) ? BLINK : 0;
-    uint8_t rval = 4*rssi/5; // 0..79
-    uint8_t i;
-    lcd_putsAtt(0, STATUS_BAR_Y, "RSSI:", attr); 
-    lcd_outdezNAtt(40, STATUS_BAR_Y, rssi, LEADING0, 2);
-    lcd_rect(48, 57, 80, 7);
+    uint8_t rssi, rval, attr, i;
+    rssi = frskyData.rssi[0].value;
+    rval = 4 * min((uint8_t)99,rssi) / 5;
+    attr = (rssi < getRssiAlarmValue(0)) ? BLINK : 0;
+    lcd_putsAtt(0, STATUS_BAR_Y, STR_RX, 0);
+    lcd_outdezNAtt(30, STATUS_BAR_Y, rssi, LEADING0|attr, 2);
+    lcd_hline(0, 55, 128, 0);
+    lcd_rect(40, 57, 80, 7);
     for (i=8; i<80; i+=8)
-      lcd_hline(48+i,60,1);
-    lcd_hline(49,58,rval);
-    lcd_hline(49,59,rval+1);
-    lcd_hline(49,60,rval+2);
-    lcd_hline(49,61,rval+1);
-    lcd_hline(49,62,rval);
+      lcd_hline(40+i,60,1);
+    lcd_hline(41,58,rval);
+    lcd_hline(41,59,rval+1);
+    lcd_hline(41,60,rval+2);
+    lcd_hline(41,61,rval+1);
+    lcd_hline(41,62,rval);
   }
   else {
     lcd_putsAtt(7*FW, STATUS_BAR_Y, STR_NODATA, BLINK);
