@@ -229,131 +229,142 @@ const pm_uint16_t CRCTable[] PROGMEM =
     0x7bc7,0x6a4e,0x58d5,0x495c,0x3de3,0x2c6a,0x1ef1,0x0f78
 };
 
-uint8_t PcmByte ;
-uint8_t PcmBitCount ;
-uint16_t PcmCrc ;
-uint8_t PcmOnesCount ;
+uint16_t PcmCrc;
+uint8_t PcmByte;
+uint8_t PcmBitCount;
+uint8_t PcmOnesCount;
 uint8_t pxxFlag[NUM_MODULES] = { 0 };
+uint8_t pxxUpCnt = 0;
 
-void crc( uint8_t data )
+void crc(uint8_t data)
 {
-    PcmCrc=(PcmCrc<<8)^pgm_read_word(&CRCTable[((PcmCrc>>8)^data) & 0xFF]);
+    PcmCrc = (PcmCrc<<8) ^ pgm_read_word(&CRCTable[((PcmCrc>>8)^data) & 0xFF]);
 }
 
-
-void putPcmPart( uint8_t value )
+void putPcmPart(uint8_t value)
 {
-    PcmByte >>= 2 ;
-    PcmByte |= value ;
-    if ( ++PcmBitCount >= 4 )
-    {
-        *pulses2MHzWPtr++ = PcmByte ;
-        PcmBitCount = PcmByte = 0 ;
+    PcmByte >>= 2;
+    PcmByte |= value;
+    if ( ++PcmBitCount >= 4 ) {
+        *pulses2MHzWPtr++ = PcmByte;
+        PcmBitCount = PcmByte = 0;
     }
 }
-
 
 void putPcmFlush()
 {
     while ( PcmBitCount != 0 )
-    {
-        putPcmPart( 0 ) ; // Empty
-    }
-    *pulses2MHzWPtr = 0 ;                               // Mark end
+        putPcmPart(0);
+    *pulses2MHzWPtr = 0;
 }
 
-void putPcmBit( uint8_t bit )
+void putPcmBit(uint8_t bit)
 {
-    if ( bit )
-    {
-        PcmOnesCount += 1 ;
-        putPcmPart( 0x80 ) ;
+    if (bit) {
+        PcmOnesCount += 1;
+        putPcmPart(0x80);
     }
-    else
-    {
-        PcmOnesCount = 0 ;
-        putPcmPart( 0xC0 ) ;
+    else {
+        PcmOnesCount = 0;
+        putPcmPart(0xC0);
     }
-    if ( PcmOnesCount >= 5 )
-    {
-        putPcmBit( 0 ) ;                                // Stuff a 0 bit in
+    if (PcmOnesCount >= 5) {
+        putPcmBit(0);
     }
 }
 
-void putPcmByte( uint8_t byte )
+void putPcmByte(uint8_t byte)
 {
-    uint8_t i ;
-
-    crc( byte ) ;
-
-    for (i=0; i<8; i++)
-    {
-        putPcmBit( byte & 0x80 ) ;
-        byte <<= 1 ;
+    crc(byte);
+    for (uint8_t i=0; i<8; i++) {
+        putPcmBit(byte & 0x80);
+        byte <<= 1;
     }
 }
-
 
 void putPcmHead()
 {
-  // send 7E, do not CRC
-  // 01111110
-  putPcmPart( 0xC0 ) ;
-  putPcmPart( 0x80 ) ;
-  putPcmPart( 0x80 ) ;
-  putPcmPart( 0x80 ) ;
-  putPcmPart( 0x80 ) ;
-  putPcmPart( 0x80 ) ;
-  putPcmPart( 0x80 ) ;
-  putPcmPart( 0xC0 ) ;
+  // send 7E = 01111110, no CRC
+  putPcmPart(0xC0);
+  putPcmPart(0x80);
+  putPcmPart(0x80);
+  putPcmPart(0x80);
+  putPcmPart(0x80);
+  putPcmPart(0x80);
+  putPcmPart(0x80);
+  putPcmPart(0xC0);
 }
 
-uint16_t scaleForPXX( uint8_t i )
+uint16_t PXXscale(uint8_t i)
 {
-    int16_t value;
+  uint8_t NCH = 8 + (g_model.ppmNCH * 2);
+  int16_t value;
+    
+  value = 1024 + g_model.limitData[i].ppmCenter;
 
-    value = channelOutputs[i];
-    value = ( value * 3 / 4 ) + 1024 + limitAddress(i)->ppmCenter;
-    value = limit<uint16_t>(1, value, 2046);
+  if (i < NCH)
+    value += channelOutputs[i] * 3 / 4;
+  
+  value = limit<uint16_t>(1, value, 2046);
 
-    return value;
+  if (i > 8)
+    value += 2048;
+
+  return value;
 }
 
 void setupPulsesPXX()
 {
-    uint8_t i ;
-    uint16_t chan ;
-    uint16_t chan_1 ;
+  uint16_t ch_a, ch_b, crc;
+  uint8_t i, upch;
 
-    pulses2MHzWPtr = pulses2MHz;
-    pulses2MHzRPtr = pulses2MHz;
+  pulses2MHzWPtr = pulses2MHz;
+  pulses2MHzRPtr = pulses2MHz;
+  
+  PcmCrc = 0;
+  PcmByte = 0;
+  PcmBitCount = 0;
+  PcmOnesCount = 0;
+  
+  putPcmHead();
+  putPcmByte(g_model.header.modelId);
+  
+  putPcmByte(pxxFlag[0]);
+  putPcmByte(0);
+  pxxFlag[0] = 0;
+  
+  upch = ((g_model.ppmNCH > 0) && (pxxUpCnt++ & 1)) ? 8 : 0;
+  
+  for (i = 0; i < 8; i += 2) {
+    ch_a = PXXscale(i   + upch);
+    ch_b = PXXscale(i+1 + upch);
+    putPcmByte(ch_a);
+    putPcmByte(((ch_a >> 8) & 0x0F) | ((ch_b << 4) & 0xF0));
+    putPcmByte(ch_b >> 4);
+  }
 
-    PcmCrc = 0 ;
-    PcmBitCount = PcmByte = 0 ;
-    PcmOnesCount = 0 ;
-    putPcmHead() ;
-    putPcmByte( g_model.header.modelId ) ;     // putPcmByte( g_model.rxnum ) ;  //
-    putPcmByte( pxxFlag[0] ) ;     // First byte of flags
-    putPcmByte( 0 ) ;     // Second byte of flags
-    pxxFlag[0] = 0;          // reset flag after send
-    for ( i = 0 ; i < 8 ; i += 2 )              // First 8 channels only
-    {
-        chan = scaleForPXX(i);
-        chan_1 = scaleForPXX(i+1);
-        putPcmByte( chan ) ; // Low byte of channel
-        putPcmByte( ( ( chan >> 8 ) & 0x0F ) | ( chan_1 << 4) ) ;  // 4 bits each from 2 channels
-        putPcmByte( chan_1 >> 4 ) ;  // High byte of channel
-    }
-    putPcmByte(0);
-    chan = PcmCrc ;                     // get the crc
-    putPcmByte( chan>>8 ) ;                        // Checksum lo
-    putPcmByte( chan ) ; // Checksum hi
-    putPcmHead( ) ;
-    putPcmFlush() ;
-    OCR1C += 40000 ;            // 20mS on
-    PORTB |= (1<<OUT_B_PPM);
+  /* CRC16 */
+  putPcmByte(0);
+  crc = PcmCrc;
+  putPcmByte(crc>>8);
+  putPcmByte(crc);
+
+  /* Sync */
+  putPcmHead();
+  putPcmFlush();
+
+  OCR1C += 40000;
+  PORTB |= (1<<OUT_B_PPM);
 }
 #endif
+
+
+
+/////////////////////////////////////////////////////////////
+
+
+
+/******* BEGIN DSM2=SERIAL ********/
 
 #if defined(DSM2_SERIAL)
 

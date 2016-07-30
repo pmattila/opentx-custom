@@ -1655,13 +1655,13 @@ void menuModelSetup(uint8_t event)
       case ITEM_MODEL_PPM1_PROTOCOL:
         lcd_putsLeft(y, NO_INDENT(STR_PROTO));
         lcd_putsiAtt(MODEL_SETUP_2ND_COLUMN, y, STR_VPROTOS, protocol, m_posHorz<=0 ? attr : 0);
-        if (IS_PPM_PROTOCOL(protocol)) {
+        if (IS_PPM_PROTOCOL(protocol) || IS_PXX_PROTOCOL(protocol)) {
           lcd_putsiAtt(MODEL_SETUP_2ND_COLUMN+7*FW, y, STR_NCHANNELS, g_model.ppmNCH+2, m_posHorz!=0 ? attr : 0);
         }
         else if (m_posHorz>0 && attr) {
           MOVE_CURSOR_FROM_HERE();
         }
-        if (attr && (editMode>0 || p1valdiff || (!IS_PPM_PROTOCOL(protocol) && !IS_DSM2_PROTOCOL(protocol)))) {
+        if (attr && (editMode>0 || p1valdiff || (!IS_PPM_PROTOCOL(protocol) && !IS_DSM2_PROTOCOL(protocol) && !IS_PXX_PROTOCOL(protocol)))) {
           switch (m_posHorz) {
             case 0:
               CHECK_INCDEC_MODELVAR_ZERO(event, g_model.protocol, PROTO_MAX-1);
@@ -1743,34 +1743,45 @@ void menuModelSetup(uint8_t event)
             }
           }
         }
-#if defined(DSM2) || defined(PXX)
-        else if (IS_DSM2_PROTOCOL(protocol) || IS_PXX_PROTOCOL(protocol)) {
+#if defined(DSM2)
+        else if (IS_DSM2_PROTOCOL(protocol)) {
           if (attr && m_posHorz > 1) {
             REPEAT_LAST_CURSOR_MOVE(); // limit 3 column row to 2 colums (Rx_Num and RANGE fields)
           }
-
           lcd_putsLeft(y, STR_RXNUM);
           lcd_outdezNAtt(MODEL_SETUP_2ND_COLUMN, y, g_model.header.modelId, (m_posHorz<=0 ? attr : 0) | LEADING0|LEFT, 2);
+	  lcd_putsAtt(MODEL_SETUP_2ND_COLUMN+4*FW, y, STR_MODULE_RANGE, m_posHorz!=0 ? attr : 0);
           if (attr && (m_posHorz==0 && (editMode>0 || p1valdiff))) {
             CHECK_INCDEC_MODELVAR_ZERO(event, g_model.header.modelId, 99);
           }
+	  dsm2Flag = (attr && m_posHorz>0 && editMode>0) ? DSM2_RANGECHECK_FLAG : 0; // [MENU] key toggles range check mode
+        }
+#endif
 #if defined(PXX)
-          if (protocol == PROTO_PXX) {
-            lcd_putsAtt(MODEL_SETUP_2ND_COLUMN+4*FW, y, STR_SYNCMENU, m_posHorz!=0 ? attr : 0);
-            uint8_t newFlag = 0;
-            if (attr && m_posHorz>0 && editMode>0) {
-              // send reset code
-              newFlag = PXX_SEND_RXNUM;
-            }
-            pxxFlag[0] = newFlag;
-          }
-#endif
-#if defined(DSM2)
-          if (IS_DSM2_PROTOCOL(protocol)) {
-            lcd_putsAtt(MODEL_SETUP_2ND_COLUMN+4*FW, y, STR_MODULE_RANGE, m_posHorz!=0 ? attr : 0);
-            dsm2Flag = (attr && m_posHorz>0 && editMode>0) ? DSM2_RANGECHECK_FLAG : 0; // [MENU] key toggles range check mode
-          }
-#endif
+        else if (IS_PXX_PROTOCOL(protocol)) {
+          lcd_putsLeft(y, STR_RXNUM);
+	  lcd_outdezNAtt(MODEL_SETUP_2ND_COLUMN, y, g_model.header.modelId, (m_posHorz<=0 ? attr : 0) | LEADING0|LEFT, 2);
+          lcd_putsAtt(MODEL_SETUP_2ND_COLUMN+12, y, STR_MODULE_BIND, (m_posHorz==1) ? attr : 0);
+          lcd_putsAtt(MODEL_SETUP_2ND_COLUMN+40, y, STR_MODULE_RANGE, (m_posHorz==2) ? attr : 0);
+	  if (m_posHorz==2) {
+	    lcd_putsAtt(62, 0, STR_RX, attr);
+	    lcd_outdezNAtt(78, 0, frskyData.rssi[0].value, attr|LEADING0|LEFT, 2);
+	  }
+	  uint8_t newFlag = 0;
+          if (attr && (editMode>0 || p1valdiff)) {
+            switch (m_posHorz) {
+              case 0:
+                CHECK_INCDEC_MODELVAR_ZERO(event, g_model.header.modelId, 99);
+		break;
+	      case 1:
+                newFlag = PXX_SEND_RXNUM;
+		break;
+	      case 2:
+                newFlag = PXX_SEND_RANGECHECK;
+		break;
+	    }
+	  }
+	  pxxFlag[0] = newFlag;
         }
 #endif
         break;

@@ -129,7 +129,7 @@ ARITHMETIC_OVERFLOW_CHECK = NO
 # if you use standard limits for throttle or directly the throttle stick you do not need to bother about this option
 # not valid for ARM based transmitters like Taranis, They do not have this rounding issue at all
 # Values = YES, NO
-ACCURAT_THROTTLE_STATS = YES
+ACCURAT_THROTTLE_STATS = NO
 
 # HAPTIC Mods
 # Values = YES, NO 
@@ -210,7 +210,7 @@ PXX = YES
 
 # DSM2 (Spektrum) protocol
 # Values = NO, SERIAL, PPM
-DSM2 = PPM
+DSM2 = NO
 
 # HUBSAN protocol
 # Values = NO, YES

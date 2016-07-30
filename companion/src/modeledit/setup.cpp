@@ -200,8 +200,7 @@ void ModulePanel::update()
         mask |= MASK_CHANNELS_COUNT | MASK_CHANNELS_RANGE | MASK_FAILSAFES | MASK_RX_NUMBER;
         break;
       case PXX_DJT:
-        mask |= MASK_RX_NUMBER;
-        module.channelsCount = 8;
+        mask |= MASK_CHANNELS_COUNT | MASK_RX_NUMBER;
         break;
       case LP45:
       case DSM2:
@@ -254,18 +253,15 @@ void ModulePanel::update()
   ui->ppmFrameLength->setMaximum(firmware->getCapability(PPMFrameLength));
   ui->ppmFrameLength->setValue(22.5+((double)module.ppmFrameLength)*0.5);
 
-  if (firmware->getCapability(HasFailsafe)) {
-    ui->label_failsafeMode->setVisible(mask & MASK_FAILSAFES);
-    ui->failsafeMode->setVisible(mask & MASK_FAILSAFES);
+  ui->label_failsafeMode->setVisible(mask & MASK_FAILSAFES);
+  ui->failsafeMode->setVisible(mask & MASK_FAILSAFES);
+  ui->failsafesLayoutLabel->setVisible(mask & MASK_FAILSAFES);
+  ui->failsafesFrame->setVisible(mask & MASK_FAILSAFES);
+
+  if (mask & MASK_FAILSAFES) {
     ui->failsafeMode->setCurrentIndex(module.failsafeMode);
     ui->failsafesFrame->setEnabled(module.failsafeMode == 1);
   }
-  else {
-    mask = 0;
-  }
-  
-  ui->failsafesLayoutLabel->setVisible(mask & MASK_FAILSAFES);
-  ui->failsafesFrame->setVisible(mask & MASK_FAILSAFES);
 
   if (mask & MASK_CHANNELS_RANGE) {
     ui->channelsStart->setMaximum(32 - ui->channelsCount->value());

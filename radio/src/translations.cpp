@@ -548,8 +548,11 @@ const pm_char STR_BLCOLOR[]  PROGMEM = TR_BLCOLOR;
   const pm_char STR_MODS_FORBIDDEN[] PROGMEM = TR_MODS_FORBIDDEN;
 #endif
 
-#if defined(PCBTARANIS) || defined(DSM2)
+#if defined(PCBTARANIS) || defined(DSM2) || defined(PXX)
   const pm_char STR_MODULE_RANGE[] PROGMEM = TR_MODULE_RANGE;
+#endif
+#if !defined(CPUARM) && defined(PXX)
+  const pm_char STR_MODULE_BIND[] PROGMEM  = TR_MODULE_BIND;
 #endif
 
 #if defined(MAVLINK)

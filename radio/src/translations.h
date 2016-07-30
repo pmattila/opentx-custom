@@ -738,7 +738,8 @@ extern const pm_char STR_COPY_TRIMS_TO_OFS[];
   extern const pm_char STR_MODS_FORBIDDEN[];
 #endif
 
-#if defined(PCBTARANIS) || defined(DSM2)
+#if defined(PCBTARANIS) || defined(DSM2) || defined(PXX)
+  extern const pm_char STR_MODULE_BIND[];
   extern const pm_char STR_MODULE_RANGE[];
 #endif
 
