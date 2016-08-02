@@ -18,45 +18,51 @@
 #include "opentxinterface.h"
 #include "opentxeeprom.h"
 
-#define HELI
 #define SIMU
 #define SIMU_EXCEPTIONS
+
+#define FLAVOUR "9x"
+#define EEPROM_VARIANT SIMU_STOCK_VARIANTS
+
 #define PCBSTD
 #define CPUM64
 #define SPLASH
 #define FLIGHT_MODES
 #define PPM_UNIT_PERCENT_PREC1
 #define HELI
-#define TEMPLATES
+#undef  TEMPLATES
 #define FRSKY
 #define FRSKY_HUB
 #define FRSKY_SPORT
 #define FRSKY_SPORT_SWR_RSSI
-#define WS_HOW_HIGH
+#undef  FRSKY_SPORT_SWR
+#undef  FRSKY_SPORT_A3_A4
+#undef  WS_HOW_HIGH
 #define PXX
-#define DSM2
-#define DSM2_PPM
-#define VARIO
-#define HAPTIC
+#undef  DSM2
+#undef  DSM2_PPM
+#undef  HAPTIC
 #define AUTOSWITCH
 #define GRAPHICS
+#define BOLD_FONT
+#undef  BATTGRAPH
 #define CURVES
 #define XCURVES
 #define GVARS
-#define BOLD_FONT
-#define VOICE
-#define PPM_CENTER_ADJUSTABLE
-#define PPM_LIMITS_SYMETRICAL
 #define BUZZER
-#define GAUGES
-#define GPS
-#define FAI_CHOICE
-#define FRSKY_STICKS
+#define AUDIO
+#undef  VOICE
+#define PPM_CENTER_ADJUSTABLE
+#undef  PPM_LIMITS_SYMETRICAL
 #define OVERRIDE_CHANNEL_FUNCTION
-#define FAS_OFFSET
-#define EEPROM_VARIANT SIMU_STOCK_VARIANTS
-#define GAUGES
-#define FLAVOUR "9x"
+#undef  GAUGES
+#undef  GPS
+#undef  VARIO
+#undef  FAI
+#undef  FAI_CHOICE
+#undef  FAS_OFFSET
+#undef  FRSKY_STICKS
+#define USE_ALT_TRIMS
 #define NUM_POTS  3
 
 #undef min
@@ -92,13 +98,14 @@ namespace OpenTxM64 {
 #include "radio/src/telemetry/frsky.cpp"
 #include "radio/src/telemetry/frsky_d.cpp"
 #include "radio/src/telemetry/frsky_sport.cpp"
-#include "radio/src/templates.cpp"
+//include "radio/src/templates.cpp"
 #include "radio/src/translations.cpp"
 #include "radio/src/fonts.cpp"
-#include "radio/src/targets/stock/voice.cpp"
+//include "radio/src/targets/stock/voice.cpp"
 #include "radio/src/buzzer.cpp"
 #include "radio/src/translations/tts_en.cpp"
-#include "radio/src/haptic.cpp"
+//include "radio/src/haptic.cpp"
+#include "radio/src/audio_avr.cpp"
 
 int16_t g_anas[NUM_STICKS+BOARD_9X_NUM_POTS];
 
