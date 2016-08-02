@@ -4161,7 +4161,7 @@ void menuModelLimits(uint8_t event)
 
 #if defined(PPM_CENTER_ADJUSTABLE)
         case ITEM_LIMITS_PPM_CENTER:
-          lcd_outdezAtt(LIMITS_PPM_CENTER_POS, y, PPM_CENTER+ld->ppmCenter, attr);
+          lcd_outdezAtt(LIMITS_PPM_CENTER_POS, y, ld->ppmCenter, attr);
           if (active) {
             CHECK_INCDEC_MODELVAR(event, ld->ppmCenter, -125, +125);
           }

@@ -150,11 +150,11 @@ Channels::Channels(QWidget * parent, ModelData & model, GeneralSettings & genera
       QSpinBox * center = new QSpinBox(this);
       center->setProperty("index", i);
       center->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
-      center->setSuffix("us");
-      center->setMinimum(1375);
-      center->setMaximum(1625);
-      center->setValue(1500);
-      center->setValue(model.limitData[i].ppmCenter + 1500);
+      //center->setSuffix("us");
+      center->setMinimum(-125);
+      center->setMaximum(125);
+      center->setValue(0);
+      center->setValue(model.limitData[i].ppmCenter);
       connect(center, SIGNAL(editingFinished()), this, SLOT(ppmcenterEdited()));
       gridLayout->addWidget(center, i+1, col++, 1, 1);
     }
@@ -233,7 +233,7 @@ void Channels::ppmcenterEdited()
 {
   QSpinBox *sb = qobject_cast<QSpinBox*>(sender());
   int index = sb->property("index").toInt();
-  model.limitData[index].ppmCenter = sb->value() - 1500;
+  model.limitData[index].ppmCenter = sb->value();
   emit modified();
 }
 
