@@ -123,7 +123,7 @@ CORRECT_NEGATIVE_VALUES = YES
 
 # adds additional code to prevent arithmetic overflows. MAX or MIN values stays. Not yet guaranteed!! Just improved
 # Values = YES, NO
-ARITHMETIC_OVERFLOW_CHECK = NO
+ARITHMETIC_OVERFLOW_CHECK = YES
 
 # increases resolution for throttle statistics and throttle counting, in very rare cases.
 # this will be only true if an output channel is used for throttle calculation, and this channel has changed limits, e.g. -90% to +80%
