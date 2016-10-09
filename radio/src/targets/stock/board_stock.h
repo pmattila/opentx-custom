@@ -205,7 +205,6 @@ void backlightFade();
 
 #define OUT_G_SIM_CTL  4 //1 : phone-jack=ppm_in
 #define INP_G_ID1      3
-#define OUT_G_HAPTIC   2
 #define INP_G_RF_POW   1
 #define INP_G_RuddDR   0
 
@@ -233,8 +232,8 @@ void rotencPoll();
 #endif
 
 // Haptic
-#define HAPTIC_ON()   PORTG |=  (1 << OUT_G_HAPTIC)
-#define HAPTIC_OFF()  PORTG &= ~(1 << OUT_G_HAPTIC)
+#define HAPTIC_ON()   PORTC |=  (1 << 0)
+#define HAPTIC_OFF()  PORTC &= ~(1 << 0)
 
 // USB fake driver
 #define usbPlugged()    false
