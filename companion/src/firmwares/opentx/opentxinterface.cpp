@@ -551,7 +551,7 @@ int OpenTxFirmware::getCapability(const Capability capability)
     case FlightModes:
       if (IS_ARM(board))
         return 9;
-      else if (board==BOARD_GRUVIN9X || board==BOARD_M2561)
+      else if (board==BOARD_GRUVIN9X)
         return 6;
       else
         return 5;
@@ -936,7 +936,6 @@ EepromLoadErrors OpenTxEepromInterface::checkVersion(unsigned int version)
       break;
     case 217:
       // 3 logical switches removed on M128 / gruvin9x boards
-      return UNSUPPORTED_NEWER_VERSION;
       break;
     default:
       return NOT_OPENTX;

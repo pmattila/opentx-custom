@@ -69,10 +69,10 @@
 #elif defined(PCBSKY9X)
   #define EEPROM_VER             216
   #define FIRST_CONV_EEPROM_VER  215
-#elif defined(CPUM2560) || defined(CPUM2561)
+#elif defined(CPUM2560)
   #define EEPROM_VER             217
   #define FIRST_CONV_EEPROM_VER  EEPROM_VER
-#elif defined(CPUM128)
+#elif defined(CPUM128) || defined(CPUM2561)
   #define EEPROM_VER             217
 #else
   #define EEPROM_VER             216
@@ -114,12 +114,23 @@
   #define NUM_TRAINER         16
   #define NUM_POTS            3
   #define NUM_XPOTS           0
-#elif defined(CPUM2560) || defined(CPUM2561)
+#elif defined(CPUM2560)
   #define MAX_MODELS          30
   #define NUM_CHNOUT          16 // number of real output channels CH1-CH16
   #define MAX_FLIGHT_MODES    6
   #define MAX_MIXERS          32
   #define MAX_EXPOS           16
+  #define NUM_LOGICAL_SWITCH  12 // number of custom switches
+  #define NUM_CFN             24 // number of functions assigned to switches
+  #define NUM_TRAINER         8
+  #define NUM_POTS            3
+  #define NUM_XPOTS           0
+#elif defined(CPUM2561)
+  #define MAX_MODELS          30
+  #define NUM_CHNOUT          16 // number of real output channels CH1-CH16
+  #define MAX_FLIGHT_MODES    5
+  #define MAX_MIXERS          32
+  #define MAX_EXPOS           14
   #define NUM_LOGICAL_SWITCH  12 // number of custom switches
   #define NUM_CFN             24 // number of functions assigned to switches
   #define NUM_TRAINER         8
@@ -515,7 +526,7 @@ PACK(typedef struct {
 #define MIN_EXPO_WEIGHT         0
 #define EXPO_VALID(ed)          ((ed)->mode)
 #define EXPO_MODE_ENABLE(ed, v) (((v)<0 && ((ed)->mode&1)) || ((v)>=0 && ((ed)->mode&2)))
-#elif defined(CPUM2560) || defined(CPUM2561)
+#elif defined(CPUM2560)
 PACK(typedef struct t_ExpoData {
   uint8_t mode:2;         // 0=end, 1=pos, 2=neg, 3=both
   uint8_t chn:2;
@@ -671,7 +682,7 @@ PACK( union u_int8int16_t {
 #define DELAY_MAX   15 /* 7.5 seconds */
 #define SLOW_MAX    15 /* 7.5 seconds */
 
-#if defined(CPUM2560) || defined(CPUM2561)
+#if defined(CPUM2560)
 PACK(typedef struct t_MixData {
   uint8_t destCh:4;          // 0, 1..NUM_CHNOUT
   uint8_t curveMode:1;       // O=curve, 1=differential

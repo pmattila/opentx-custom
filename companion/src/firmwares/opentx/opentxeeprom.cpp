@@ -6,7 +6,7 @@
 
 #define IS_DBLEEPROM(board, version)         ((board==BOARD_GRUVIN9X || board==BOARD_M128 || board==BOARD_M2561) && version >= 213)
 // Macro used for Gruvin9x board and M128 board between versions 213 and 214 (when there were stack overflows!)
-#define IS_DBLRAM(board, version)            ((board==BOARD_GRUVIN9X && version >= 213) || (board==BOARD_M2561 && version >= 213) || (board==BOARD_M128 && version >= 213 && version <= 214))
+#define IS_DBLRAM(board, version)            ((board==BOARD_GRUVIN9X && version >= 213) || (board==BOARD_M128 && version >= 213 && version <= 214))
 
 #define HAS_PERSISTENT_TIMERS(board)         (IS_ARM(board) || board == BOARD_GRUVIN9X)
 #define HAS_LARGE_LCD(board)                 IS_TARANIS(board)
@@ -268,7 +268,7 @@ class SourcesConversionTable: public ConversionTable {
 
       if (!(flags & FLAG_NOTELEMETRY)) {
         if (afterrelease21March2013) {
-          if ((board != BOARD_STOCK && (board!=BOARD_M128 || version<215)) || (variant & GVARS_VARIANT)) {
+          if ((board != BOARD_STOCK && (board!=BOARD_M128 || version<215) && (board != BOARD_M2561)) || (variant & GVARS_VARIANT)) {
             for (int i=0; i<MAX_GVARS(board, version); i++)
               addConversion(RawSource(SOURCE_TYPE_GVAR, i), val++);
           }
@@ -728,7 +728,7 @@ class FlightModeField: public TransformedField {
       version(version),
       rotencCount(IS_ARM(board) ? 1 : (board == BOARD_GRUVIN9X ? 2 : 0))
     {
-      if (board == BOARD_STOCK || (board==BOARD_M128 && version>=215)) {
+      if (board == BOARD_STOCK || (board==BOARD_M128 && version>=215) || (board==BOARD_M2561)) {
         // On stock we use 10bits per trim
         for (int i=0; i<NUM_STICKS; i++)
           internalField.Append(new SignedField<8>(trimBase[i]));
@@ -766,7 +766,7 @@ class FlightModeField: public TransformedField {
         internalField.Append(new SignedField<16>(phase.rotaryEncoders[i]));
       }
 
-      if (board != BOARD_STOCK && (board != BOARD_M128 || version < 215)) {
+      if (board != BOARD_STOCK && (board != BOARD_M128 || version < 215) && (board != BOARD_M2561)) {
         for (int i=0; i<MAX_GVARS(board, version); i++) {
           internalField.Append(new SignedField<16>(phase.gvars[i]));
         }
@@ -790,7 +790,7 @@ class FlightModeField: public TransformedField {
             trim = 501 + phase.trimRef[i] - (phase.trimRef[i] > index ? 1 : 0);
           else
             trim = std::max(-500, std::min(500, phase.trim[i]));
-          if (board == BOARD_STOCK || (board == BOARD_M128 && version >= 215)) {
+          if (board == BOARD_STOCK || (board == BOARD_M128 && version >= 215) || (board == BOARD_M2561)) {
             trimBase[i] = trim >> 2;
             trimExt[i] = (trim & 0x03);
           }
@@ -821,7 +821,7 @@ class FlightModeField: public TransformedField {
           }
           else {
             int trim;
-            if (board == BOARD_STOCK || (board == BOARD_M128 && version >= 215))
+            if (board == BOARD_STOCK || (board == BOARD_M128 && version >= 215) || (board == BOARD_M2561))
               trim = ((trimBase[i]) << 2) + (trimExt[i] & 0x03);
             else
               trim = trimBase[i];
@@ -2592,14 +2592,14 @@ OpenTxModelData::OpenTxModelData(ModelData & modelData, BoardEnum board, unsigne
     internalField.Append(new UnsignedField<8>(modelData.nSwToWarn));
   }
 
-  if ((board == BOARD_STOCK || (board == BOARD_M128 && version >= 215)) && (variant & GVARS_VARIANT)) {
+  if ((board == BOARD_STOCK || (board == BOARD_M128 && version >= 215) || (board == BOARD_M2561)) && (variant & GVARS_VARIANT)) {
     for (int i=0; i<MAX_GVARS(board, version); i++) {
       // on M64 GVARS are common to all phases, and there is no name
       internalField.Append(new SignedField<16>(modelData.flightModeData[0].gvars[i]));
     }
   }
 
-  if (board != BOARD_STOCK && (board != BOARD_M128 || version < 215)) {
+  if (board != BOARD_STOCK && (board != BOARD_M128 || version < 215) && (board != BOARD_M2561)) {
     for (int i=0; i<MAX_GVARS(board, version); i++) {
       internalField.Append(new ZCharField<6>(modelData.gvars_names[i]));
       if (version >= 216) {
@@ -2609,10 +2609,10 @@ OpenTxModelData::OpenTxModelData(ModelData & modelData, BoardEnum board, unsigne
     }
   }
 
-  if ((board != BOARD_STOCK && (board != BOARD_M128 || version < 215)) || (variant & FRSKY_VARIANT)) {
+  if ((board != BOARD_STOCK && (board != BOARD_M128 || version < 215) && (board != BOARD_M2561)) || (variant & FRSKY_VARIANT)) {
     internalField.Append(new FrskyField(modelData.frsky, board, version));
   }
-  else if ((board == BOARD_STOCK || board == BOARD_M128) && (variant & MAVLINK_VARIANT)) {
+  else if ((board == BOARD_STOCK || board == BOARD_M128 || board == BOARD_M2561) && (variant & MAVLINK_VARIANT)) {
     internalField.Append(new MavlinkField(modelData.mavlink, board, version));
   }
 
