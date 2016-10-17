@@ -103,8 +103,8 @@
 #define UNEXPECTED_SHUTDOWN() (mcusr & (1 << WDRF))
 
 // Trainer driver
-bool checkSlaveMode();
-#define SLAVE_MODE() checkSlaveMode()
+//bool checkSlaveMode();
+#define SLAVE_MODE() (0)
 #define JACK_PPM_OUT() PORTG &= ~(1<<OUT_G_SIM_CTL)
 #define JACK_PPM_IN() PORTG |=  (1<<OUT_G_SIM_CTL)
 
