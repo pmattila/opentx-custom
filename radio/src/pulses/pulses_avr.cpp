@@ -301,7 +301,7 @@ uint16_t PXXscale(uint8_t i)
 
   value  = 1024;
   value += g_model.limitData[i].ppmCenter;
-  value += channelOutputs[i] * 3/4;
+  value += channelOutputs[i] * 5/8;   // was 3/4
 
   if (value < 1)
     value = 1;
