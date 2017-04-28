@@ -127,7 +127,7 @@ QString getProtocolStr(const int proto)
                                    "Silverlit A", "Silverlit B", "Silverlit C",
                                    "CTP1009",
                                    "LP45", "DSM2", "DSMX",
-                                   "PPM16", "PPMsim",
+                                   "PPM16", "PPMext",
                                    "PXX-D16", "PXX-D8", "PXX-LR12", "PXX",
   };
 

@@ -154,7 +154,7 @@
 #if defined(CPUARM)
   #define TR_XPPM
 #else
-  #define TR_XPPM              "PPM16\0""PPMsim"
+  #define TR_XPPM              "PPM16\0""PPMext"
 #endif
 
 #define TR_VPROTOS             "PPM\0  " TR_XPPM TR_PXX TR_DSM2 TR_IRPROTOS
