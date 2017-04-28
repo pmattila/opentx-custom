@@ -472,6 +472,9 @@
 #define LEN_VTMRMODES          "\003"
 #define TR_VTMRMODES           "OFF""ON\0""THs""TH%""THt"
 
+#define LEN_RF_PROTOCOLS       "\004"
+#define TR_RF_PROTOCOLS        "X8\0\0""X16\0""D8\0\0""LR12"
+
 #define LEN_VTRAINERMODES      "\006"
 #define TR_VTRAINERMODES       "Master""Slave\0"
 

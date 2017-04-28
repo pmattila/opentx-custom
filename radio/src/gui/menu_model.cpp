@@ -1655,9 +1655,15 @@ void menuModelSetup(uint8_t event)
       case ITEM_MODEL_PPM1_PROTOCOL:
         lcd_putsLeft(y, NO_INDENT(STR_PROTO));
         lcd_putsiAtt(MODEL_SETUP_2ND_COLUMN, y, STR_VPROTOS, protocol, m_posHorz<=0 ? attr : 0);
-        if (IS_PPM_PROTOCOL(protocol) || IS_PXX_PROTOCOL(protocol)) {
+        if (IS_PPM_PROTOCOL(protocol)) {
           lcd_putsiAtt(MODEL_SETUP_2ND_COLUMN+7*FW, y, STR_NCHANNELS, g_model.ppmNCH+2, m_posHorz!=0 ? attr : 0);
         }
+#if defined(PXX)
+        else if (IS_PXX_PROTOCOL(protocol)) {
+          g_model.ppmNCH &= 3;
+          lcd_putsiAtt(MODEL_SETUP_2ND_COLUMN+4*FW, y, STR_RF_PROTOCOLS, g_model.ppmNCH, m_posHorz!=0 ? attr : 0);
+        }
+#endif
         else if (m_posHorz>0 && attr) {
           MOVE_CURSOR_FROM_HERE();
         }
@@ -1667,8 +1673,15 @@ void menuModelSetup(uint8_t event)
               CHECK_INCDEC_MODELVAR_ZERO(event, g_model.protocol, PROTO_MAX-1);
               break;
             case 1:
-              CHECK_INCDEC_MODELVAR(event, g_model.ppmNCH, -2, 4);
-              g_model.ppmFrameLength = g_model.ppmNCH * 8;
+	      if (IS_PPM_PROTOCOL(protocol)) {
+                CHECK_INCDEC_MODELVAR(event, g_model.ppmNCH, -2, 4);
+                g_model.ppmFrameLength = g_model.ppmNCH * 8;
+	      } 
+#if defined(PXX)
+	      else if (IS_PXX_PROTOCOL(protocol)) {
+                CHECK_INCDEC_MODELVAR(event, g_model.ppmNCH, 0, 3);
+	      }
+#endif
               break;
           }
         }

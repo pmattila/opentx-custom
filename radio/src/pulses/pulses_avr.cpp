@@ -297,15 +297,16 @@ void putPcmHead()
 
 uint16_t PXXscale(uint8_t i)
 {
-  uint8_t NCH = 8 + (g_model.ppmNCH * 2);
   int16_t value;
-    
-  value = 1024 + g_model.limitData[i].ppmCenter;
 
-  if (i < NCH)
-    value += channelOutputs[i] * 3 / 4;
-  
-  value = limit<uint16_t>(1, value, 2046);
+  value  = 1024;
+  value += g_model.limitData[i].ppmCenter;
+  value += channelOutputs[i] * 3/4;
+
+  if (value < 1)
+    value = 1;
+  if (value > 2046)
+    value = 2046;
 
   if (i > 8)
     value += 2048;
@@ -316,7 +317,7 @@ uint16_t PXXscale(uint8_t i)
 void setupPulsesPXX()
 {
   uint16_t ch_a, ch_b, crc;
-  uint8_t i, upch;
+  uint8_t i, upch, proto;
 
   pulses2MHzWPtr = pulses2MHz;
   pulses2MHzRPtr = pulses2MHz;
@@ -325,15 +326,18 @@ void setupPulsesPXX()
   PcmByte = 0;
   PcmBitCount = 0;
   PcmOnesCount = 0;
+
+  proto = g_model.ppmNCH & 3;
+  proto = (proto) ? proto - 1 : 0;
   
   putPcmHead();
   putPcmByte(g_model.header.modelId);
-  
-  putPcmByte(pxxFlag[0]);
+
+  putPcmByte(pxxFlag[0] | (proto << 6));
   putPcmByte(0);
   pxxFlag[0] = 0;
   
-  upch = ((g_model.ppmNCH > 0) && (pxxUpCnt++ & 1)) ? 8 : 0;
+  upch = ((g_model.ppmNCH & 1) && (pxxUpCnt++ & 1)) ? 8 : 0;
   
   for (i = 0; i < 8; i += 2) {
     ch_a = PXXscale(i   + upch);

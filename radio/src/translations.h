@@ -174,10 +174,12 @@ extern const pm_char STR_OPEN9X[];
   #define OFS_COUNTRYCODES      (OFS_VLCD)
 #endif
 #if defined(PXX) || defined(CPUARM)
-  #define OFS_VFAILSAFE         (OFS_COUNTRYCODES + sizeof(TR_COUNTRYCODES))
+  #define OFS_RF_PROTOCOLS      (OFS_COUNTRYCODES + sizeof(TR_COUNTRYCODES))
+  #define OFS_VFAILSAFE         (OFS_RF_PROTOCOLS + sizeof(TR_RF_PROTOCOLS))
   #define OFS_VTRAINERMODES     (OFS_VFAILSAFE + sizeof(TR_VFAILSAFE))
 #else
-  #define OFS_VFAILSAFE         (OFS_COUNTRYCODES)
+  #define OFS_RF_PROTOCOLS      (OFS_COUNTRYCODES)
+  #define OFS_VFAILSAFE         (OFS_RF_PROTOCOLS)
   #define OFS_VTRAINERMODES     (OFS_VFAILSAFE)
 #endif
 #if defined(CPUARM)
@@ -279,6 +281,7 @@ extern const pm_char STR_OPEN9X[];
 #endif
 
 #if defined(PXX) || defined(CPUARM)
+  #define STR_RF_PROTOCOLS      (STR_OPEN9X + OFS_RF_PROTOCOLS)
   #define STR_COUNTRYCODES      (STR_OPEN9X + OFS_COUNTRYCODES)
   #define STR_VFAILSAFE         (STR_OPEN9X + OFS_VFAILSAFE)
 #endif

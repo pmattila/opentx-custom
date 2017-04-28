@@ -112,6 +112,7 @@ const pm_char STR_OPEN9X[] PROGMEM =
 #endif
 #if defined(PXX) || defined(CPUARM)
     ISTR(COUNTRYCODES)
+    ISTR(RF_PROTOCOLS)
     ISTR(VFAILSAFE)
 #endif
 #if defined(CPUARM)
