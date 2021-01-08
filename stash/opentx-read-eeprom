@@ -1,0 +1,12 @@
+#!/bin/bash
+
+DEV=${DEV:-m2561}
+
+case $1 in
+
+ *.bin)  FORMAT=r ;;
+ *.hex)  FORMAT=i ;;
+
+esac
+
+avrdude -c usbasp -p ${DEV} -U eeprom:r:$1:${FORMAT}

@@ -1,0 +1,18 @@
+
+
+1. Prepare sources
+
+	mkdir companion\win
+
+	copy dirent.h companion\win
+
+	cd companion\win
+
+	cmake -G "Visual Studio 10" ..\src
+
+2. Double-click ALL_BUILD (not the filter!)
+
+3. Select "Debug" or "Release" build
+
+4. Select "ALL_BUILD" -> Build
+
